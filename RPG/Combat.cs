@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace RPG
 {
-    internal class Program
+    internal class Combat
     {
-        static void Main(string[] args)
+        private readonly Random ran = new Random();
+        
+        public void SelectEnemies() 
         {
-            Menus main = new Menus();
-            main.StartGame();
-            Console.ReadKey();
+            
+           
         }
     }
 }

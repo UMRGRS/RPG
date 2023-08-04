@@ -8,9 +8,9 @@ namespace RPG
 {
     internal class Personaje
     {
-        private float vida;//0-10
-        private float dano;//0-10
-        private float armadura;//0-5
+        private float vida;
+        private float dano;
+        private float armadura;
         public float Vida { get => vida; set => vida = value; }
         public float Dano { get => dano; set => dano = value; }
         public float Armadura { get => armadura; set => armadura = value; }
