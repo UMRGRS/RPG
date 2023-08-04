@@ -48,6 +48,7 @@
     <Compile Include="Enemigos.cs" />
     <Compile Include="Jugador.cs" />
     <Compile Include="Menus.cs" />
+    <Compile Include="Items container.cs" />
     <Compile Include="Personaje.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
