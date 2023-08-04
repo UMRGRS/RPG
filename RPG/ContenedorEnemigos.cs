@@ -1,22 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RPG
 {
     internal class ContenedorEnemigos
     {
-        Enemigos sF1 = new Enemigos(1, 1, 1, 1, 1, 1);
-        Enemigos sF2 = new Enemigos(1, 1, 1, 1, 1, 2);
-        Enemigos sF3 = new Enemigos(1, 1, 1, 1, 1, 3);
-        Enemigos sA1 = new Enemigos(1, 1, 1, 1, 1, 1);
-        Enemigos sA2 = new Enemigos(1, 1, 1, 1, 1, 2);
-        Enemigos sA3 = new Enemigos(1, 1, 1, 1, 1, 3);
-        Enemigos sN1 = new Enemigos(1, 1, 1, 1, 1, 1);
-        Enemigos sN2 = new Enemigos(1, 1, 1, 1, 1, 2);
-        Enemigos sN3 = new Enemigos(1, 1, 1, 1, 1, 3);
+        //Fire = 1
+        //Water = 2;
+        //Nature = 3
+        Enemigos[] enemigosTier1 = new Enemigos[3];
+        Enemigos[] enemigosTier2 = new Enemigos[3];
+        Enemigos[] enemigosTier3 = new Enemigos[3];
+        public Enemigos[] EnemigosTier1 { get => enemigosTier1; set => enemigosTier1 = value; }
+        public Enemigos[] EnemigosTier2 { get => enemigosTier2; set => enemigosTier2 = value; }
+        public Enemigos[] EnemigosTier3 { get => enemigosTier3; set => enemigosTier3 = value; }
+        public ContenedorEnemigos() 
+        {
+            CreateArrays();
+        }
+        private void CreateArrays() 
+        {
+            enemigosTier1[0] = new Enemigos(1, 1, 1, 1, 1, 1);
+            enemigosTier1[1] = new Enemigos(1, 1, 1, 2, 1, 1);
+            enemigosTier1[2] = new Enemigos(1, 1, 1, 3, 1, 1);
+            
+            enemigosTier2[0] = new Enemigos(1, 1, 1, 1, 1, 2);
+            enemigosTier2[1] = new Enemigos(1, 1, 1, 2, 1, 2);
+            enemigosTier2[2] = new Enemigos(1, 1, 1, 3, 1, 2);
+
+            enemigosTier3[0] = new Enemigos(1, 1, 1, 1, 1, 3);
+            enemigosTier3[1] = new Enemigos(1, 1, 1, 2, 1, 3);
+            enemigosTier3[2] = new Enemigos(1, 1, 1, 3, 1, 3);
+        }
     }
 }

@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RPG
 {
     internal class Menus
     {
         private readonly Utility utility = new Utility();
+        Jugador player1;
         public void StartGame() 
         {
             int opc = 2;
-            //Crear el objeto del jugador
+            player1 = new Jugador(10, 2, 0.5f, 1);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
-                //Sustituir por jugador.nombre = Console.ReadLine();
-                string uwu = Console.ReadLine(); 
+                player1.Nombre = Console.ReadLine(); 
                 Console.Clear();
-                Console.WriteLine($"¿Seguro de que quieres usar {uwu} como nombre?");
+                Console.WriteLine($"¿Seguro de que quieres usar {player1.Nombre} como nombre?");
                 Console.WriteLine("1. Si 2. No");
                 opc = utility.CheckValidOption(1, 2);
                 Console.Clear();
@@ -38,7 +38,9 @@ namespace RPG
             switch (opc) 
             {
                 case 1:
-                    //Iniciar una batalla
+                    Combat startCombat = new Combat();
+                    startCombat.SelectEnemies(player1.LVL);
+                    CombatMenu();
                     break;
                 case 2:
                     //Abrir el inventario
