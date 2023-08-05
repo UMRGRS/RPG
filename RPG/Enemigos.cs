@@ -37,7 +37,7 @@ namespace RPG
         public override void RecibirDano(float dano)
         {
             base.RecibirDano(dano);
-            if (Vida<=0)
+            if (Vida <= 0)
             {
                 //recompesa
             }
