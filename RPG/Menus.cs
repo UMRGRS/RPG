@@ -15,7 +15,7 @@ namespace RPG
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(10, 2, 0.5f, 1);
+            player1 = new Jugador(10, 2, 0.5f, 12);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
@@ -28,7 +28,7 @@ namespace RPG
             }
             MainMenu();
         }
-        public void MainMenu()
+        private void MainMenu()
         {
             Console.WriteLine("Seleciona una opcion");
             Console.WriteLine("1. Cazar");
@@ -45,16 +45,20 @@ namespace RPG
                     CombatMenu();
                     break;
                 case 2:
-                    //Abrir el inventario
+                    Console.Clear();
+                    InventoryMeu();
                     break;
                 case 3:
-                    //Abrir el menu de creacion de objetos
+                    Console.Clear();
+                    CraftingMenu();
                     break;
                 case 4:
-                    //Abrir el menu de equipo y stats
+                    Console.Clear();
+                    EquipmentAndStatsMenu();
                     break;
                 case 5:
-                    //Iniciar una mazmorra
+                    Console.Clear();
+                    Dungeon();
                     break;
                 default:
                     Console.Clear();
@@ -63,8 +67,14 @@ namespace RPG
                     break;
             }
         }
-        public void CombatMenu() 
+        private void CombatMenu() 
         {
+            if (inCombatEnemies.Count() == 0)
+            {
+                Console.Clear();
+                VictoryMenu();
+                MainMenu();
+            }
             Console.Clear();
             Console.WriteLine($"Te encuentras con {inCombatEnemies.Count()} slimes");
             Console.WriteLine("1. Atacar");
@@ -87,15 +97,18 @@ namespace RPG
                     {
                         case 1:
                             inCombatEnemies[0].RecibirDano(2);
+                            CheckIfAlive(inCombatEnemies[0]);
                             CombatMenu();
                             break;
                         case 2:
-                            CombatMenu();
                             inCombatEnemies[1].RecibirDano(2);
+                            CheckIfAlive(inCombatEnemies[1]);
+                            CombatMenu();
                             break;
                         case 3:
-                            CombatMenu();
                             inCombatEnemies[2].RecibirDano(2);
+                            CheckIfAlive(inCombatEnemies[2]);
+                            CombatMenu();
                             break;
                     }
                     if (opc1 == inCombatEnemies.Count() + 1) 
@@ -123,21 +136,32 @@ namespace RPG
                     break;
             }
         }
-        public void InventoryMeu() 
+        private void InventoryMeu() 
         { 
             //Recuperar la informacion de la clase inventario y desplegarla aqui
         }
-        public void CraftingMenu() 
+        private void CraftingMenu() 
         { 
             //Desplegar menu para crear objetos
         }
-        public void EquipmentAndStatsMenu() 
+        private void EquipmentAndStatsMenu() 
         { 
             //Despliega los objetos equipados y las stats del jugador
         }
-        public void Dungeon() 
+        private void Dungeon() 
         { 
             //Inicia la mazmorra
+        }
+        private void CheckIfAlive(Enemigos enemyToCheck) 
+        {
+            if (enemyToCheck.Vida <= 0) 
+            {
+                inCombatEnemies.Remove(enemyToCheck);
+            }
+        }
+        private void VictoryMenu() 
+        {
+            Console.WriteLine("Derrotaste a todos los enemigos!");
         }
     }
 }

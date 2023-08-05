@@ -7,6 +7,7 @@ namespace RPG
 {
     internal class Combat
     {
+        //Necesitamos crear los objetos en tiempo de ejecucion, si lo hacemos desde el principio, si spawnean mas de un tipo a la vez se toma como un solo enemigo
         //Cada turno todos los slimes en pantalla atacaran al jugador
         private readonly Random ran = new Random(); //Clase para generar numeros random
         private readonly ContenedorEnemigos enemies = new ContenedorEnemigos();
