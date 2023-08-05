@@ -19,6 +19,7 @@ namespace RPG
             this.dano = dano;
             this.armadura = armadura;
         }
+        //Reducimos la vida del personaje 
         public virtual void RecibirDano(float dano) 
         {
             vida -= dano;

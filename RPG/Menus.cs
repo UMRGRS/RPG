@@ -6,6 +6,7 @@ using System.Text;
 
 namespace RPG
 {
+    //Está clase son solo menus, cada uno de ellos se comunica con todas las demas clases para ejecutar las funciones necesarias
     internal class Menus
     {
         private readonly Utility utility = new Utility();
@@ -68,6 +69,7 @@ namespace RPG
         }
         public void CombatMenu() 
         {
+            Console.Clear();
             Console.WriteLine($"Te encuentras con {inCombatEnemies.Length} slimes");
             Console.WriteLine("1. Atacar");
             Console.WriteLine("2. Items");
@@ -77,16 +79,19 @@ namespace RPG
             switch (opc)
             {
                 case 1:
-                    //Ataca a un slime
+                    //Desplegar una lista con los enemigos en el campo y dejar al jugador seleccionar a cual atacar
                     break;
                 case 2:
-                    //Consumir items
+                    //Desplegar menu con todas las pociones que el jugador tiene en su inventario, no slimes no atacaran si consumes un item
                     break;
                 case 3:
-                    //Cambiar a modo defensivo
+                    //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
                     break;
                 case 4:
-                    //Escapa de la batalla
+                    //Mejorar si hay tiempo a un sistema de probabilidad de escape
+                    Console.Clear();
+                    Console.WriteLine("Escapaste con exito");
+                    MainMenu();
                     break;
                 default:
                     Console.Clear();

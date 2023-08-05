@@ -7,6 +7,7 @@ namespace RPG
 {
     internal class ContenedorEnemigos
     {
+        //Lugar para crear todos los enemigos que deseemos
         //Fire = 1
         //Water = 2;
         //Nature = 3

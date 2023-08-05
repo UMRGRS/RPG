@@ -7,7 +7,10 @@ namespace RPG
 {
     internal class Utility
     {
-        public int CheckValidOption(int bottom, int top) 
+        //Checador universal para opciones numericas
+        //Argumento 1 = primer opcion
+        //Argumento 2 = ultima opcion
+        public int CheckValidOption(int firstOption, int lastOption) 
         {
             int opt = 0;
             for(int i = 0; i < 1; i++) 
@@ -23,10 +26,10 @@ namespace RPG
                     i--;
                 }
             }
-            if(opt < bottom || opt > top) 
+            if(opt < firstOption || opt > lastOption) 
             {
                 Console.WriteLine("Opcion invalida, seleciona otra");
-                CheckValidOption(bottom, top);
+                CheckValidOption(firstOption, lastOption);
             }
             return opt;
         }
