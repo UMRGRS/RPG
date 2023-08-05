@@ -9,7 +9,8 @@ namespace RPG
     internal class Menus
     {
         private readonly Utility utility = new Utility();
-        Jugador player1;
+        private Jugador player1;
+        private Enemigos[] inCombatEnemies;
         public void StartGame() 
         {
             int opc = 2;
@@ -39,7 +40,11 @@ namespace RPG
             {
                 case 1:
                     Combat startCombat = new Combat();
-                    startCombat.SelectEnemies(player1.LVL);
+                    inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
+                    foreach (var enemy in inCombatEnemies) 
+                    {
+                        Console.WriteLine(enemy.Nombre);
+                    }
                     CombatMenu();
                     break;
                 case 2:
@@ -63,7 +68,7 @@ namespace RPG
         }
         public void CombatMenu() 
         {
-            Console.WriteLine("Te encuentras con x slimes");
+            Console.WriteLine($"Te encuentras con {inCombatEnemies.Length} slimes");
             Console.WriteLine("1. Atacar");
             Console.WriteLine("2. Items");
             Console.WriteLine("3. Bloquear");
