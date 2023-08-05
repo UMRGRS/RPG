@@ -11,7 +11,7 @@ namespace RPG
     {
         private readonly Utility utility = new Utility();
         private Jugador player1;
-        private Enemigos[] inCombatEnemies;
+        private List<Enemigos> inCombatEnemies;
         public void StartGame() 
         {
             int opc = 2;
@@ -42,10 +42,6 @@ namespace RPG
                 case 1:
                     Combat startCombat = new Combat();
                     inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
-                    foreach (var enemy in inCombatEnemies) 
-                    {
-                        Console.WriteLine(enemy.Nombre);
-                    }
                     CombatMenu();
                     break;
                 case 2:
@@ -55,7 +51,7 @@ namespace RPG
                     //Abrir el menu de creacion de objetos
                     break;
                 case 4:
-                    //Abrir el menu de equipo
+                    //Abrir el menu de equipo y stats
                     break;
                 case 5:
                     //Iniciar una mazmorra
@@ -70,7 +66,7 @@ namespace RPG
         public void CombatMenu() 
         {
             Console.Clear();
-            Console.WriteLine($"Te encuentras con {inCombatEnemies.Length} slimes");
+            Console.WriteLine($"Te encuentras con {inCombatEnemies.Count()} slimes");
             Console.WriteLine("1. Atacar");
             Console.WriteLine("2. Items");
             Console.WriteLine("3. Bloquear");
@@ -80,6 +76,33 @@ namespace RPG
             {
                 case 1:
                     //Desplegar una lista con los enemigos en el campo y dejar al jugador seleccionar a cual atacar
+                    Console.WriteLine("Selecciona a quien atacar");
+                    for (int i = 0; i < inCombatEnemies.Count(); i++) 
+                    {
+                        Console.WriteLine($"{i + 1}. {inCombatEnemies[i].Nombre}, Vida {inCombatEnemies[i].Vida}");
+                    }
+                    Console.WriteLine($"{inCombatEnemies.Count() + 1}. Regresar");
+                    int opc1 = utility.CheckValidOption(1, inCombatEnemies.Count() + 1);
+                    switch (opc1) 
+                    {
+                        case 1:
+                            inCombatEnemies[0].RecibirDano(2);
+                            CombatMenu();
+                            break;
+                        case 2:
+                            CombatMenu();
+                            inCombatEnemies[1].RecibirDano(2);
+                            break;
+                        case 3:
+                            CombatMenu();
+                            inCombatEnemies[2].RecibirDano(2);
+                            break;
+                    }
+                    if (opc1 == inCombatEnemies.Count() + 1) 
+                    {
+                        Console.Clear();
+                        CombatMenu();
+                    }
                     break;
                 case 2:
                     //Desplegar menu con todas las pociones que el jugador tiene en su inventario, no slimes no atacaran si consumes un item
@@ -108,9 +131,9 @@ namespace RPG
         { 
             //Desplegar menu para crear objetos
         }
-        public void EquipmentMenu() 
+        public void EquipmentAndStatsMenu() 
         { 
-            //Despliega los objetos equipados
+            //Despliega los objetos equipados y las stats del jugador
         }
         public void Dungeon() 
         { 

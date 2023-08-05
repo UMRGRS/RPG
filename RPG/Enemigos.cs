@@ -11,7 +11,9 @@ namespace RPG
         private int elemento;
         private int xP_drop;
         private int rango;
-        private int x = 1;
+        private readonly float lifeModifier = 2;
+        private readonly float damageModifier = 2;
+        private readonly float armorModifier = 0.5f;
         public int Elemento { get => elemento; set => elemento = value; }
         public int XP_drop { get => xP_drop; set => xP_drop = value; }
         public int Rango { get => rango; set => rango = value; }
@@ -28,9 +30,9 @@ namespace RPG
         //Calculamos las estadisticas del enemigo en base a su rango
         public void CalcularEstadisticas()
         {
-            Vida *= (rango / x);
-            Dano *= (rango / x);
-            Armadura *= (rango / x);
+            Vida *= (lifeModifier * rango);
+            Dano *= (damageModifier * rango);
+            Armadura *= (armorModifier * rango);
         }
         public override void RecibirDano(float dano)
         {
