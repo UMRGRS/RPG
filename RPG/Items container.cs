@@ -8,10 +8,13 @@ namespace RPG
 {
     internal class Items_container
     {
-        Dictionary<string, int> items = new Dictionary<string, int>();
+        //Recuerda añadir los objetos de forma cantidad,nombre.
+        //Primero añade los trozos de slime en este orden, trozos de fuefo, trozos de agua, trozos de naturaleza
+        //Si no entiendes algo mandame mensaje
+        Dictionary<int, string> items = new Dictionary<int, string>();
         public void AddItems() 
         {
-            items.Add("Health potion", 0);
+            items.Add(1, "Trozo de slime de fuego");
         }
     }
 }
