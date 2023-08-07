@@ -116,7 +116,7 @@ namespace RPG
                     }
                     break;
                 case 2:
-                    //Desplegar menu con todas las pociones que el jugador tiene en su inventario, no slimes no atacaran si consumes un item
+                    //Desplegar menu con todas las pociones que el jugador tiene en su inventario, slimes no atacaran si consumes un item
                     break;
                 case 3:
                     //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
