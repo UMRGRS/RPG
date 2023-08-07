@@ -12,6 +12,8 @@ namespace RPG
         //Cada turno todos los slimes en pantalla atacaran al jugador
         private readonly Random ran = new Random(); //Clase para generar numeros random
 
+         private readonly Utility utility = new Utility();
+
         public List<Enemigos> SpawnEnemies(int lvl) 
         {
             //En base al nivel del jugador hacemos aparecer slimes de nivel mas alto o bajo
@@ -49,7 +51,7 @@ namespace RPG
             for (int i = 0; i < enemiesQuantity; i++) 
             {
                 int enemyElement = ran.Next(0, 3);
-                selectedEnemies.Add(new Enemigos("Sparky", 1, 1, 1, enemyElement, 1, enemyLvl));
+                selectedEnemies.Add(new Enemigos(utility.SelecNombres(enemyElement), 1, 1, 1, enemyElement, 1, enemyLvl));
             }
             return selectedEnemies;
         }

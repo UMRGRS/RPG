@@ -33,24 +33,30 @@ namespace RPG
             }
             return opt;
         }
-       /* public string SelecNombres(int elemento) 
-        {
-            List<string> naturaNames = new List<string> { "Nomi", "Goby", "Drida" };
-            List<string> ignaNames = new List<string> { "Fefe", "Sasa", "Dracus" };
-            List<string> aquaNames = new List<string> { "Sere", "Tito", "Nide" };
+        private readonly Random ran = new Random();
+         public string SelecNombres(int elemento) 
+         {
+             List<string> naturaNames = new List<string> { "Nomi", "Goby", "Drida" };
+             List<string> ignaNames = new List<string> { "Fefe", "Sasa", "Dracus" };
+             List<string> aquaNames = new List<string> { "Sere", "Tito", "Nide" };
 
-            if (elemento == 1)
-            {
+            int random = ran.Next(1, 3);
+            string nomRegresar = "";
 
+             if (elemento == 1)
+             {
+                nomRegresar = aquaNames[random];
             }
-            if (elemento == 2)
-            {
-
+             if (elemento == 2)
+             {
+                nomRegresar = ignaNames[random];
             }
-            if (elemento == 3)
-            {
-
+             if (elemento == 3)
+             {
+                nomRegresar = naturaNames[random];
             }
-        }*/
+
+            return nomRegresar;
+         }
     }
 }
