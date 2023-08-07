@@ -17,14 +17,14 @@ namespace RPG
             items.Add("Athena Potion", 0); //Posion de daño
             items.Add("Sephe Potion", 0); //Posion de vida
             items.Add("Igna Jam", 0); //Fuego 1
-            items.Add("Hesta Jam", 0);      //2
-            items.Add("Hephe Jam", 0);      //3
+            items.Add("Hesta Jam", 0); //2
+            items.Add("Hephe Jam", 0); //3
             items.Add("Natura Jam", 0); //Naturaleza 1
-            items.Add("Ninphe Jam", 0);            //2
-            items.Add("Demetra Jam", 0);           //3
+            items.Add("Ninphe Jam", 0); //2
+            items.Add("Demetra Jam", 0); //3
             items.Add("Aqua Jam", 0); //Agua 1
-            items.Add("Anfi Jam", 0);      //2
-            items.Add("Nepht Jam", 0);     //3
+            items.Add("Anfi Jam", 0); //2
+            items.Add("Nepht Jam", 0); //3
         }
     }
 }
