@@ -5,6 +5,7 @@ using System.Text;
 
 namespace RPG
 {
+    //Test
     internal class Combat
     {
         //Hay que crear varios nombres para cada tipo de slime y diferenciarlos
