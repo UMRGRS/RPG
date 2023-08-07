@@ -51,7 +51,7 @@ namespace RPG
             //Un numero aleatorio entre 1 y 3 selecciona al slime que aparecera de la lista de enemigos disponibles
             for (int i = 0; i < enemiesQuantity; i++) 
             {
-                int enemyElement = ran.Next(0, 3);
+                int enemyElement = ran.Next(1, 4);
                 selectedEnemies.Add(new Enemigos(utility.SelecNombres(enemyElement), 1, 1, 1, enemyElement, 1, enemyLvl));
             }
             return selectedEnemies;
