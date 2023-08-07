@@ -33,5 +33,24 @@ namespace RPG
             }
             return opt;
         }
+       /* public string SelecNombres(int elemento) 
+        {
+            List<string> naturaNames = new List<string> { "Nomi", "Goby", "Drida" };
+            List<string> ignaNames = new List<string> { "Fefe", "Sasa", "Dracus" };
+            List<string> aquaNames = new List<string> { "Sere", "Tito", "Nide" };
+
+            if (elemento == 1)
+            {
+
+            }
+            if (elemento == 2)
+            {
+
+            }
+            if (elemento == 3)
+            {
+
+            }
+        }*/
     }
 }
