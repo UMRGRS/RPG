@@ -62,6 +62,5 @@ namespace RPG
         {
             vidaActual -= dano;
         }
-        
     }
 }

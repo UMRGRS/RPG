@@ -43,16 +43,16 @@ namespace RPG
             int random = ran.Next(1, 3);
             string nomRegresar = "";
 
-             if (elemento == 1)
-             {
+            if (elemento == 1)
+            {
                 nomRegresar = aquaNames[random];
             }
-             if (elemento == 2)
-             {
+            if (elemento == 2)
+            {
                 nomRegresar = ignaNames[random];
             }
-             if (elemento == 3)
-             {
+            if (elemento == 3)
+            {
                 nomRegresar = naturaNames[random];
             }
 
