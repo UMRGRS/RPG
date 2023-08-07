@@ -75,6 +75,7 @@ namespace RPG
             }
             Console.Clear();
             Console.WriteLine($"Te encuentras con {inCombatEnemies.Count()} slimes");
+            Console.WriteLine($"Tu vida: {player1.VidaActual}");
             Console.WriteLine("1. Atacar");
             Console.WriteLine("2. Items");
             Console.WriteLine("3. Bloquear");
@@ -91,27 +92,15 @@ namespace RPG
                     }
                     Console.WriteLine($"{inCombatEnemies.Count() + 1}. Regresar");
                     int opc1 = utility.CheckValidOption(1, inCombatEnemies.Count() + 1);
-                    switch (opc1) 
-                    {
-                        case 1:
-                            inCombatEnemies[0].RecibirDano(2);
-                            CheckIfAlive(inCombatEnemies[0]);
-                            CombatMenu();
-                            break;
-                        case 2:
-                            inCombatEnemies[1].RecibirDano(2);
-                            CheckIfAlive(inCombatEnemies[1]);
-                            CombatMenu();
-                            break;
-                        case 3:
-                            inCombatEnemies[2].RecibirDano(2);
-                            CheckIfAlive(inCombatEnemies[2]);
-                            CombatMenu();
-                            break;
-                    }
-                    if (opc1 == inCombatEnemies.Count() + 1) 
+                    if (opc1 == inCombatEnemies.Count() + 1)
                     {
                         Console.Clear();
+                        CombatMenu();
+                    }
+                    else
+                    {
+                        inCombatEnemies[opc - 1].RecibirDano(2);
+                        CheckIfAlive(inCombatEnemies[opc - 1]);
                         CombatMenu();
                     }
                     break;

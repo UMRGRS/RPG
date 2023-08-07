@@ -7,6 +7,15 @@ namespace RPG
 {
     internal class Utility
     {
+        private readonly Random ran = new Random();
+        
+        private readonly List<string> naturaNames = new List<string> { "Nomi", "Goby", "Drida" };
+        private readonly List<string> ignaNames = new List<string> { "Fefe", "Sasa", "Dracus" };
+        private readonly List<string> aquaNames = new List<string> { "Sere", "Tito", "Nide" };
+
+        private readonly Dictionary<int, int> advantage = new Dictionary<int, int>() { { 1, 2 }, { 2, 3 }, { 3, 1 } };
+        private readonly Dictionary<int, int> disadvantage = new Dictionary<int, int>() { { 3, 2 }, { 2, 1 }, { 1, 3 } };
+
         //Checador universal para opciones numericas
         //Argumento 1 = primer opcion
         //Argumento 2 = ultima opcion
@@ -33,30 +42,43 @@ namespace RPG
             }
             return opt;
         }
-        private readonly Random ran = new Random();
+        //Selector de nombres aleatorioss por elemento
          public string SelecNombres(int elemento) 
          {
-             List<string> naturaNames = new List<string> { "Nomi", "Goby", "Drida" };
-             List<string> ignaNames = new List<string> { "Fefe", "Sasa", "Dracus" };
-             List<string> aquaNames = new List<string> { "Sere", "Tito", "Nide" };
-
             int random = ran.Next(1, 3);
-            string nomRegresar = "";
+            string nomRegresar = " ";
 
             if (elemento == 1)
             {
-                nomRegresar = aquaNames[random];
+                nomRegresar = aquaNames[random] + " hydro slime";
             }
-            if (elemento == 2)
+            else if (elemento == 2)
             {
-                nomRegresar = ignaNames[random];
+                nomRegresar = ignaNames[random] + " pyro slime";
             }
-            if (elemento == 3)
+            else
             {
-                nomRegresar = naturaNames[random];
+                nomRegresar = naturaNames[random] + " dendro slime";
             }
-
             return nomRegresar;
          }
+        //Calculadora de daño
+        public float CalculateDamage(float atackerDamage,int atackerElement, int targetElement, float TargetArmor)
+        {  
+            float damage = atackerDamage -= TargetArmor;
+            if (advantage[atackerElement] == targetElement)
+            {
+                damage += 2;
+            }
+            else if (disadvantage[atackerElement] == targetElement)
+            {
+                damage -= 2;
+            }
+            else if(targetElement == atackerElement)
+            {
+                damage *= 0.1f;
+            }
+            return damage;
+        }
     }
 }

@@ -5,40 +5,55 @@ using System.Text;
 
 namespace RPG
 {
+    public class Sword 
+    {
+        private float swordDamage;
+        private int swordElement = 0;
+
+        public float SwordDamage { get => swordDamage; set => swordDamage = value; }
+        public int SwordElement { get => swordElement; set => swordElement = value; }
+    }
+    public class Bow 
+    {
+        private float bowDamage;
+        private int bowElement = 0;
+
+        public float BowDamage { get => bowDamage; set => bowDamage = value; }
+        public int BowElement { get => bowElement; set => bowElement = value; }
+    }
+    public class Shield 
+    {
+        private float shieldDefense;
+        private int shieldElement = 0;
+
+        public float ShieldDefense { get => shieldDefense; set => shieldDefense = value; }
+        public int ShieldElement { get => shieldElement; set => shieldElement = value; }
+    }
     internal class Jugador : Personaje
     {
         private string nombre;
-        private float vidaActual;
-        private float danoActual;
+        private float actualHealth;
+        private float actualDamage;
         private int lvl;
         private int xP = 0;
         private int xP_sig_LV = 30;
-        private float shieldDefense = 3;
-        private int shieldElement = 0;
-        private int armorElement = 0;
-        private float swordDamage = 3;
-        private float bowDamage = 2;
         public string Nombre { get => nombre; set => nombre = value; }
         public int LVL { get => lvl; set => lvl = value; }
         public int XP { get => xP; set => xP = value; }
         public int XP_sig_LV { get => xP_sig_LV; set => xP_sig_LV = value; }
-        public float Shield { get => shieldDefense; set => shieldDefense = value; }
-        public float SwordDamage { get => swordDamage; set => swordDamage = value; }
-        public float BowDamage { get => bowDamage; set => bowDamage = value; }
-        public float VidaActual { get => vidaActual; set => vidaActual = value; }
-        public float DanoActual { get => danoActual; set => danoActual = value; }
-        public int ShieldElement { get => shieldElement; set => shieldElement = value; }
-        public int ArmorElement { get => armorElement; set => armorElement = value; }
+        public float VidaActual { get => actualHealth; set => actualHealth = value; }
+        public float DanoActual { get => actualDamage; set => actualDamage = value; }
 
-        public Jugador(float vida, float dano, float armadura, int lvl):base (vida,dano,armadura)
+        public Jugador(float health, float damage, float armor, int lvl):base (health, damage, armor)
         {
             this.lvl = lvl;
-            danoActual = dano;
+            actualDamage = damage;
+            actualHealth = health;
         }
         public void AumentarEstadisticas()
         {
             Vida += 1;
-            Dano += 1;
+            BaseDamage += 1;
             Armadura += 1;
         }
         
@@ -55,12 +70,12 @@ namespace RPG
         public void Derrota()
         {
             xP -= 5;
-            vidaActual = Vida;
-            danoActual = Dano;
+            actualHealth = Vida;
+            actualDamage = BaseDamage;
         }
         public override void RecibirDano(float dano)
         {
-            vidaActual -= dano;
+            actualHealth -= dano;
         }
     }
 }

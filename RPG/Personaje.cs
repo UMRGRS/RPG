@@ -7,26 +7,22 @@ namespace RPG
 {
     internal class Personaje
     {
-        private float vida;
-        private float dano;
-        private float armadura;
-        public float Vida { get => vida; set => vida = value; }
-        public float Dano { get => dano; set => dano = value; }
-        public float Armadura { get => armadura; set => armadura = value; }
-        public Personaje(float vida, float dano, float armadura)
+        private float health;
+        private float baseDamage;
+        private float armor;
+        public float Vida { get => health; set => health = value; }
+        public float BaseDamage { get => baseDamage; set => baseDamage = value; }
+        public float Armadura { get => armor; set => armor = value; }
+        public Personaje(float health, float baseDamage, float armor)
         {
-            this.vida = vida;
-            this.dano = dano;
-            this.armadura = armadura;
+            this.health = health;
+            this.baseDamage = baseDamage;
+            this.armor = armor;
         }
         //Reducimos la vida del personaje 
-        public virtual void RecibirDano(float dano) 
+        public virtual void RecibirDano(float damage) 
         {
-            vida -= dano;
-        }
-        public virtual void CalculateDamageTaken(float dano) 
-        {
-            float totalDamage = Dano - armadura;
+            health -= damage;
         }
     }
 }

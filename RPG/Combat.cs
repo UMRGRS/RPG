@@ -35,12 +35,12 @@ namespace RPG
         }
         private List<Enemigos> SelectEnemies(int enemyLvl, int lvl) 
         {
-            //Generamos un numero aleatorio entre 0 y 12 si ese numero es menor al nivel del jugador aparece un slime extra
+            //Generamos un numero aleatorio entre 1 y 12 si ese numero es menor al nivel del jugador aparece un slime extra
             //Siempre aparece un slime por defecto
             int enemiesQuantity = 1;
             for (int i = 0; i < 2; i++) 
             {
-                int spawnOrNot = ran.Next(1, 13);
+                int spawnOrNot = ran.Next(1, 12);
                 if (spawnOrNot < lvl) 
                 {
                     enemiesQuantity++;
