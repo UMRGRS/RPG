@@ -8,8 +8,8 @@ namespace RPG
     internal class ContenedorEnemigos
     {
         //Clase en proceso de eliminacion, tal vez podemos usarla para los nombres)?
-        //Fire = 1
-        //Water = 2;
+        //Water = 1
+        //Fire = 2
         //Nature = 3
 
         //enemigosTier1[0] = new Enemigos("Sparks", 1, 1, 1, 1, 1, 1);
@@ -23,7 +23,5 @@ namespace RPG
         //enemigosTier3[0] = new Enemigos("Sparks 3", 1, 1, 1, 1, 1, 3);
         //enemigosTier3[1] = new Enemigos("Waterfall 3", 1, 1, 1, 2, 1, 3);
         //enemigosTier3[2] = new Enemigos("Dendro 3", 1, 1, 1, 3, 1, 3);
-
-
     }
 }

@@ -24,5 +24,9 @@ namespace RPG
         {
             vida -= dano;
         }
+        public virtual void CalculateDamageTaken(float dano) 
+        {
+            float totalDamage = Dano - armadura;
+        }
     }
 }
