@@ -77,14 +77,6 @@ namespace RPG
         }
         private void CombatMenu() 
         {
-            //Si la lista de enemigos esta vacia terminas el combate
-            if (inCombatEnemies.Count() == 0)
-            {
-                Console.Clear();
-                VictoryMenu();
-                Console.ReadKey();
-                MainMenu();
-            }
             Console.Clear();
             int atackingEnemy = ran.Next(1, inCombatEnemies.Count() + 1);
             Console.WriteLine($"Te encuentras con {inCombatEnemies.Count()} slimes");
@@ -98,59 +90,48 @@ namespace RPG
             switch (opc)
             {
                 case 1:
-                    //Desplegar una lista con los enemigos en el campo y dejar al jugador seleccionar a cual atacar
-                    Console.WriteLine("Selecciona a quien atacar");
-                    for (int i = 0; i < inCombatEnemies.Count(); i++) 
-                    {
-                        Console.WriteLine($"{i + 1}. {inCombatEnemies[i].Nombre}, Vida {inCombatEnemies[i].Health}");
-                    }
-                    int enemyToAtack = utility.CheckValidOption(1, inCombatEnemies.Count());
-
-                    //Selecionas el arma que vas a usar para atacar
-                    Console.WriteLine("Selecciona el arma que usaras");
-                    Console.WriteLine($"1. Espada daño: {player1.Sword.WeaponDamage} Elemento: {elements[player1.Sword.WeaponElement]}");
-                    Console.WriteLine($"2. Arco daño: {player1.Bow.WeaponDamage} Elemento: {elements[player1.Bow.WeaponElement]} (Probabilidad de evadir todo el daño)");
-                    int weapon = utility.CheckValidOption(1, 2);
-                    switch (weapon) 
-                    {
-                        case 1:
-                            player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.ArmorElement));
-                            AtackEnemy(enemyToAtack, player1.Sword.WeaponDamage);
-                            break;
-                        case 2:
-                            //Generas un numero aleatorio, si es menor a 4 no recibes daño
-                            int damageOrNot = ran.Next(1, 11);
-                            if (damageOrNot < 4)
-                            {
-                                Console.WriteLine("Esquivaste los ataques enemigos");
-                                AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
-                            }
-                            else 
-                            {
-                                player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.Armor));
-                                AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
-                            }
-                            break;
-                    }
-                    CombatMenu();
+                    Fight(atackingEnemy);
                     break;
                 case 2:
-                    //Desplegar menu con todas las pociones que el jugador tiene en su inventario, slimes no atacaran si consumes un item
+                    //Abre el inventario de pociones y puedes seleccionar una para consumir
+                    Console.WriteLine("Inventario");
+                    for (int i = 0; i < playerInventory.Consumables.Count(); i++) 
+                    {
+                        Console.WriteLine($"{i + 1}. {playerInventory.Consumables[i]} Cantidad: {playerInventory.PlayerInventory[playerInventory.Consumables[i]]}");
+                    }
+                    Console.ReadKey();
                     break;
                 case 3:
                     //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
+                    float damage = utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.MyShield.ShieldElement, player1.MyShield.ShieldDefense);
+                    player1.RecibirDano(damage);
+                    Console.WriteLine($"Te proteges con tu escudo recibes {damage} puntos de daño");
+                    Console.WriteLine("Presiona cualquier tecla para continuar");
+                    Console.ReadKey();
                     break;
                 case 4:
                     //Mejorar si hay tiempo a un sistema de probabilidad de escape
                     Console.Clear();
                     Console.WriteLine("Escapaste con exito");
                     MainMenu();
-                    break;
+                    return;
                 default:
                     Console.Clear();
                     Console.WriteLine("Ocurrio un error intenta de nuevo");
                     CombatMenu();
-                    break;
+                    return;
+            }
+            //Si la lista de enemigos esta vacia terminas el combate
+            if (inCombatEnemies.Count() == 0)
+            {
+                Console.Clear();
+                VictoryMenu();
+                Console.ReadKey();
+                MainMenu();
+            }
+            else 
+            {
+                CombatMenu();
             }
         }
         private void InventoryMenu() 
@@ -165,7 +146,7 @@ namespace RPG
         { 
             //Despliega el daño/defensa de el equipo mas su elemento y las stats del jugador
         }
-        private void Dungeon() 
+        private void Dungeon()
         { 
             //Inicia la mazmorra
         }
@@ -173,17 +154,65 @@ namespace RPG
         {
             Console.WriteLine("Derrotaste a todos los enemigos!");
         }
-        private void AtackEnemy(int enemyToAtack, float damage) 
+        //Combat system
+        public void Fight(int atackingEnemy) 
         {
-            inCombatEnemies[enemyToAtack - 1].RecibirDano(utility.CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor));
-            CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
+            //Desplegar una lista con los enemigos en el campo y dejar al jugador seleccionar a cual atacar
+            Console.WriteLine("Selecciona a quien atacar");
+            for (int i = 0; i < inCombatEnemies.Count(); i++)
+            {
+                Console.WriteLine($"{i + 1}. {inCombatEnemies[i].Nombre}, Vida {inCombatEnemies[i].Health}");
+            }
+            int enemyToAtack = utility.CheckValidOption(1, inCombatEnemies.Count());
+
+            //Selecionas el arma que vas a usar para atacar
+            Console.WriteLine("Selecciona el arma que usaras");
+            Console.WriteLine($"1. Espada daño: {player1.Sword.WeaponDamage} Elemento: {elements[player1.Sword.WeaponElement]}");
+            Console.WriteLine($"2. Arco daño: {player1.Bow.WeaponDamage} Elemento: {elements[player1.Bow.WeaponElement]} (Probabilidad de evadir todo el daño)");
+            int weapon = utility.CheckValidOption(1, 2);
+            switch (weapon)
+            {
+                case 1:
+                    player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.ArmorElement));
+                    AtackEnemy(enemyToAtack, player1.Sword.WeaponDamage);
+                    break;
+                case 2:
+                    //Generas un numero aleatorio, si es menor a 4 no recibes daño
+                    int damageOrNot = ran.Next(1, 11);
+                    if (damageOrNot < 4)
+                    {
+                        Console.WriteLine("Esquivaste los ataques enemigos");
+                        AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
+                    }
+                    else
+                    {
+                        player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.Armor));
+                        AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
+                    }
+                    break;
+            }
         }
         private void CheckIfAlive(Enemigos enemyToCheck)
         {
             if (enemyToCheck.Health <= 0)
             {
+                int itemQuantity = ran.Next(1, 4);
+                Console.WriteLine($"Acabaste con {enemyToCheck.Nombre} recibes:");
+                for (int i = 0; i <= itemQuantity; i++) 
+                {
+                    string loot = utility.LootToReceive(enemyToCheck.Rango, enemyToCheck.Elemento);
+                    playerInventory.PlayerInventory[loot] += 1;
+                    Console.WriteLine(loot);
+                }
+                Console.WriteLine("Presiona cualquier tecla para continuar");
+                Console.ReadKey();
                 inCombatEnemies.Remove(enemyToCheck);
             }
+        }
+        private void AtackEnemy(int enemyToAtack, float damage) 
+        {
+            inCombatEnemies[enemyToAtack - 1].RecibirDano(utility.CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor));
+            CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
         }
     }
 }

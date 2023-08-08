@@ -8,10 +8,11 @@ namespace RPG
     internal class Utility
     {
         private readonly Random ran = new Random();
+        private readonly Inventory inventory = new Inventory();
         
-        private readonly List<string> naturaNames = new List<string> { "Nomi", "Goby", "Drida" };
-        private readonly List<string> ignaNames = new List<string> { "Fefe", "Sasa", "Dracus" };
-        private readonly List<string> aquaNames = new List<string> { "Sere", "Tito", "Nide" };
+        private readonly List<string> aquaNames = new List<string> {"Sere", "Tito", "Nide" };
+        private readonly List<string> ignaNames = new List<string> {"Fefe", "Sasa", "Dracus" };
+        private readonly List<string> naturaNames = new List<string> {"Nomi", "Goby", "Drida" };
 
         private readonly Dictionary<int, int> advantage = new Dictionary<int, int>() { { 1, 2 }, { 2, 3 }, { 3, 1 } };
         private readonly Dictionary<int, int> disadvantage = new Dictionary<int, int>() { { 3, 2 }, { 2, 1 }, { 1, 3 } };
@@ -83,6 +84,25 @@ namespace RPG
                 return 0;
             }
             return damage;
+        }
+        //Determinador de botin
+        public string LootToReceive(int tierEnemigo, int elemento) 
+        {
+            string loot = " ";
+            int selectedItem = ran.Next(1, tierEnemigo + 1);
+            switch (elemento) 
+            {
+                case 1:
+                    loot = inventory.AquaJams[selectedItem - 1];
+                    break;
+                case 2:
+                    loot = inventory.PyroJams[selectedItem - 1];
+                    break;
+                case 3:
+                    loot = inventory.DendroJams[selectedItem - 1];
+                    break;
+            }
+            return loot;
         }
     }
 }
