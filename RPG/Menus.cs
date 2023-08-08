@@ -5,10 +5,9 @@ using System.Linq;
 namespace RPG
 {
     //Está clase son solo menus, cada uno de ellos se comunica con todas las demas clases para ejecutar las funciones necesarias
-    internal class Menus
+    internal class Menus:Utility
     {
         //Utility
-        private readonly Utility utility = new Utility();
         private readonly Random ran = new Random();
 
         //Objects
@@ -31,7 +30,7 @@ namespace RPG
                 Console.Clear();
                 Console.WriteLine($"¿Seguro de que quieres usar {player1.Name} como nombre?");
                 Console.WriteLine("1. Si 2. No");
-                opc = utility.CheckValidOption(1, 2);
+                opc = CheckValidOption(1, 2);
                 Console.Clear();
             }
             MainMenu();
@@ -44,7 +43,7 @@ namespace RPG
             Console.WriteLine("3. Creacion");
             Console.WriteLine("4. Equipo");
             Console.WriteLine("5. Mazmorra");
-            int opc = utility.CheckValidOption(1, 5);
+            int opc = CheckValidOption(1, 5);
             switch (opc) 
             {
                 case 1:
@@ -86,7 +85,7 @@ namespace RPG
             Console.WriteLine("2. Items");
             Console.WriteLine("3. Bloquear");
             Console.WriteLine("4. Huir");
-            int opc = utility.CheckValidOption(1, 4);
+            int opc = CheckValidOption(1, 4);
             switch (opc)
             {
                 case 1:
@@ -99,11 +98,12 @@ namespace RPG
                     {
                         Console.WriteLine($"{i + 1}. {playerInventory.Consumables[i]} Cantidad: {playerInventory.PlayerInventory[playerInventory.Consumables[i]]}");
                     }
-                    Console.ReadKey();
+                    int potion = CheckValidOption(1,2);
+
                     break;
                 case 3:
                     //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
-                    float damage = utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.MyShield.ShieldElement, player1.MyShield.ShieldDefense);
+                    float damage = CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.MyShield.ShieldElement, player1.MyShield.ShieldDefense);
                     player1.RecibirDano(damage);
                     Console.WriteLine($"Te proteges con tu escudo recibes {damage} puntos de daño");
                     Console.WriteLine("Presiona cualquier tecla para continuar");
@@ -163,17 +163,17 @@ namespace RPG
             {
                 Console.WriteLine($"{i + 1}. {inCombatEnemies[i].Nombre}, Vida {inCombatEnemies[i].Health}");
             }
-            int enemyToAtack = utility.CheckValidOption(1, inCombatEnemies.Count());
+            int enemyToAtack = CheckValidOption(1, inCombatEnemies.Count());
 
             //Selecionas el arma que vas a usar para atacar
             Console.WriteLine("Selecciona el arma que usaras");
             Console.WriteLine($"1. Espada daño: {player1.Sword.WeaponDamage} Elemento: {elements[player1.Sword.WeaponElement]}");
             Console.WriteLine($"2. Arco daño: {player1.Bow.WeaponDamage} Elemento: {elements[player1.Bow.WeaponElement]} (Probabilidad de evadir todo el daño)");
-            int weapon = utility.CheckValidOption(1, 2);
+            int weapon = CheckValidOption(1, 2);
             switch (weapon)
             {
                 case 1:
-                    player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.ArmorElement));
+                    player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.ArmorElement));
                     AtackEnemy(enemyToAtack, player1.Sword.WeaponDamage);
                     break;
                 case 2:
@@ -186,7 +186,7 @@ namespace RPG
                     }
                     else
                     {
-                        player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.Armor));
+                        player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.Armor));
                         AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
                     }
                     break;
@@ -200,7 +200,7 @@ namespace RPG
                 Console.WriteLine($"Acabaste con {enemyToCheck.Nombre} recibes:");
                 for (int i = 0; i <= itemQuantity; i++) 
                 {
-                    string loot = utility.LootToReceive(enemyToCheck.Rango, enemyToCheck.Elemento);
+                    string loot = LootToReceive(enemyToCheck.Rango, enemyToCheck.Elemento);
                     playerInventory.PlayerInventory[loot] += 1;
                     Console.WriteLine(loot);
                 }
@@ -211,7 +211,7 @@ namespace RPG
         }
         private void AtackEnemy(int enemyToAtack, float damage) 
         {
-            inCombatEnemies[enemyToAtack - 1].RecibirDano(utility.CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor));
+            inCombatEnemies[enemyToAtack - 1].RecibirDano(CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor));
             CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
         }
     }
