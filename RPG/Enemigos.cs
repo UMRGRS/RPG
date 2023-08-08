@@ -7,10 +7,13 @@ namespace RPG
 {
     internal class Enemigos:Personaje
     {
+        //Variables
         private string name;
         private int element;
         private int xP_drop;
         private int rango;
+
+        //Modifiers
         private readonly float lifeModifier = 2;
         private readonly float damageModifier = 2;
         private readonly float armorModifier = 0.5f;
@@ -30,17 +33,13 @@ namespace RPG
         //Calculamos las estadisticas del enemigo en base a su rango
         public void CalcularEstadisticas()
         {
-            Vida *= (lifeModifier * rango);
-            BaseDamage *= (damageModifier * rango);
-            Armadura *= (armorModifier * rango);
+            Health *= lifeModifier * rango;
+            BaseDamage *= damageModifier * rango;
+            Armor *= armorModifier * rango;
         }
         public override void RecibirDano(float dano)
         {
             base.RecibirDano(dano);
-            if (Vida <= 0)
-            {
-                //recompesa
-            }
         }
     }
 }

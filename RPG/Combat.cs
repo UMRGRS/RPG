@@ -8,11 +8,10 @@ namespace RPG
     //Test
     internal class Combat
     {
-        //Hay que crear varios nombres para cada tipo de slime y diferenciarlos
-        //Cada turno todos los slimes en pantalla atacaran al jugador
-        private readonly Random ran = new Random(); //Clase para generar numeros random
+        //Clase para generar numeros aleatorios
+        private readonly Random ran = new Random(); 
 
-         private readonly Utility utility = new Utility();
+        private readonly Utility utility = new Utility();
 
         public List<Enemigos> SpawnEnemies(int lvl) 
         {

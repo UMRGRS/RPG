@@ -46,7 +46,7 @@ namespace RPG
          public string SelecNombres(int elemento) 
          {
             int random = ran.Next(1, 3);
-            string nomRegresar = " ";
+            string nomRegresar;
 
             if (elemento == 1)
             {
@@ -65,18 +65,22 @@ namespace RPG
         //Calculadora de daño
         public float CalculateDamage(float atackerDamage,int atackerElement, int targetElement, float TargetArmor)
         {  
-            float damage = atackerDamage -= TargetArmor;
-            if (advantage[atackerElement] == targetElement)
+            float damage = atackerDamage - TargetArmor;
+            if (advantage.ContainsKey(atackerElement) && advantage[atackerElement] == targetElement)
             {
                 damage += 2;
             }
-            else if (disadvantage[atackerElement] == targetElement)
+            else if (disadvantage.ContainsKey(atackerElement) && disadvantage[atackerElement] == targetElement)
             {
                 damage -= 2;
             }
             else if(targetElement == atackerElement)
             {
                 damage *= 0.1f;
+            }
+            if (damage < 0) 
+            {
+                return 0;
             }
             return damage;
         }

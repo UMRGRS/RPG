@@ -7,19 +7,29 @@ namespace RPG
     //Está clase son solo menus, cada uno de ellos se comunica con todas las demas clases para ejecutar las funciones necesarias
     internal class Menus
     {
+        //Utility
         private readonly Utility utility = new Utility();
+        private readonly Random ran = new Random();
+
+        //Objects
         private Jugador player1;
+        private Inventory playerInventory = new Inventory();
+
+        //Variables
         private List<Enemigos> inCombatEnemies;
+        private readonly Dictionary<int, string> elements = new Dictionary<int, string>() { { 0, "Sin elemento" }, { 1, "Hydro" }, { 2, "Pyro" }, { 3, "Dendro" } };
+        
+        //Call this method to start the game :b
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(10, 2, 0.5f, 12);
+            player1 = new Jugador(10, 4, 2, 1.5f, 0.5f, 1);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
-                player1.Nombre = Console.ReadLine(); 
+                player1.Name = Console.ReadLine(); 
                 Console.Clear();
-                Console.WriteLine($"¿Seguro de que quieres usar {player1.Nombre} como nombre?");
+                Console.WriteLine($"¿Seguro de que quieres usar {player1.Name} como nombre?");
                 Console.WriteLine("1. Si 2. No");
                 opc = utility.CheckValidOption(1, 2);
                 Console.Clear();
@@ -44,7 +54,7 @@ namespace RPG
                     break;
                 case 2:
                     Console.Clear();
-                    InventoryMeu();
+                    InventoryMenu();
                     break;
                 case 3:
                     Console.Clear();
@@ -67,15 +77,19 @@ namespace RPG
         }
         private void CombatMenu() 
         {
+            //Si la lista de enemigos esta vacia terminas el combate
             if (inCombatEnemies.Count() == 0)
             {
                 Console.Clear();
                 VictoryMenu();
+                Console.ReadKey();
                 MainMenu();
             }
             Console.Clear();
+            int atackingEnemy = ran.Next(1, inCombatEnemies.Count() + 1);
             Console.WriteLine($"Te encuentras con {inCombatEnemies.Count()} slimes");
-            Console.WriteLine($"Tu vida: {player1.VidaActual}");
+            Console.WriteLine($"El enemigo numero {atackingEnemy} ({elements[inCombatEnemies[atackingEnemy - 1].Elemento]}) se prepara para atacar");
+            Console.WriteLine($"Tu vida: {player1.ActualHealth}");
             Console.WriteLine("1. Atacar");
             Console.WriteLine("2. Items");
             Console.WriteLine("3. Bloquear");
@@ -88,21 +102,37 @@ namespace RPG
                     Console.WriteLine("Selecciona a quien atacar");
                     for (int i = 0; i < inCombatEnemies.Count(); i++) 
                     {
-                        Console.WriteLine($"{i + 1}. {inCombatEnemies[i].Nombre}, Vida {inCombatEnemies[i].Vida}");
+                        Console.WriteLine($"{i + 1}. {inCombatEnemies[i].Nombre}, Vida {inCombatEnemies[i].Health}");
                     }
-                    Console.WriteLine($"{inCombatEnemies.Count() + 1}. Regresar");
-                    int opc1 = utility.CheckValidOption(1, inCombatEnemies.Count() + 1);
-                    if (opc1 == inCombatEnemies.Count() + 1)
+                    int enemyToAtack = utility.CheckValidOption(1, inCombatEnemies.Count());
+
+                    //Selecionas el arma que vas a usar para atacar
+                    Console.WriteLine("Selecciona el arma que usaras");
+                    Console.WriteLine($"1. Espada daño: {player1.Sword.WeaponDamage} Elemento: {elements[player1.Sword.WeaponElement]}");
+                    Console.WriteLine($"2. Arco daño: {player1.Bow.WeaponDamage} Elemento: {elements[player1.Bow.WeaponElement]} (Probabilidad de evadir todo el daño)");
+                    int weapon = utility.CheckValidOption(1, 2);
+                    switch (weapon) 
                     {
-                        Console.Clear();
-                        CombatMenu();
+                        case 1:
+                            player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.ArmorElement));
+                            AtackEnemy(enemyToAtack, player1.Sword.WeaponDamage);
+                            break;
+                        case 2:
+                            //Generas un numero aleatorio, si es menor a 4 no recibes daño
+                            int damageOrNot = ran.Next(1, 11);
+                            if (damageOrNot < 4)
+                            {
+                                Console.WriteLine("Esquivaste los ataques enemigos");
+                                AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
+                            }
+                            else 
+                            {
+                                player1.RecibirDano(utility.CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.Armor));
+                                AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
+                            }
+                            break;
                     }
-                    else
-                    {
-                        inCombatEnemies[opc - 1].RecibirDano(2);
-                        CheckIfAlive(inCombatEnemies[opc - 1]);
-                        CombatMenu();
-                    }
+                    CombatMenu();
                     break;
                 case 2:
                     //Desplegar menu con todas las pociones que el jugador tiene en su inventario, slimes no atacaran si consumes un item
@@ -123,7 +153,7 @@ namespace RPG
                     break;
             }
         }
-        private void InventoryMeu() 
+        private void InventoryMenu() 
         { 
             //Recuperar la informacion de la clase inventario y desplegarla aqui
         }
@@ -133,22 +163,27 @@ namespace RPG
         }
         private void EquipmentAndStatsMenu() 
         { 
-            //Despliega los objetos equipados y las stats del jugador
+            //Despliega el daño/defensa de el equipo mas su elemento y las stats del jugador
         }
         private void Dungeon() 
         { 
             //Inicia la mazmorra
         }
-        private void CheckIfAlive(Enemigos enemyToCheck) 
-        {
-            if (enemyToCheck.Vida <= 0) 
-            {
-                inCombatEnemies.Remove(enemyToCheck);
-            }
-        }
         private void VictoryMenu() 
         {
             Console.WriteLine("Derrotaste a todos los enemigos!");
+        }
+        private void AtackEnemy(int enemyToAtack, float damage) 
+        {
+            inCombatEnemies[enemyToAtack - 1].RecibirDano(utility.CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor));
+            CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
+        }
+        private void CheckIfAlive(Enemigos enemyToCheck)
+        {
+            if (enemyToCheck.Health <= 0)
+            {
+                inCombatEnemies.Remove(enemyToCheck);
+            }
         }
     }
 }

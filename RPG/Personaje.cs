@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace RPG
 {
@@ -10,10 +7,10 @@ namespace RPG
         private float health;
         private float baseDamage;
         private float armor;
-        public float Vida { get => health; set => health = value; }
+        public float Health { get => health; set => health = value; }
         public float BaseDamage { get => baseDamage; set => baseDamage = value; }
-        public float Armadura { get => armor; set => armor = value; }
-        public Personaje(float health, float baseDamage, float armor)
+        public float Armor { get => armor; set => armor = value; }
+        public Personaje(float health, float armor, [Optional] float baseDamage)
         {
             this.health = health;
             this.baseDamage = baseDamage;
