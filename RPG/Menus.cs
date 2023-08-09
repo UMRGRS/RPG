@@ -22,7 +22,7 @@ namespace RPG
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(10, 4, 2, 1.5f, 0.5f, 1);
+            player1 = new Jugador(10, 4, 2, 1.5f, 0.5f, 12);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
@@ -37,6 +37,7 @@ namespace RPG
         }
         private void MainMenu()
         {
+            Console.Clear();
             Console.WriteLine("Seleciona una opcion");
             Console.WriteLine("1. Cazar");
             Console.WriteLine("2. Inventario");
@@ -47,7 +48,7 @@ namespace RPG
             switch (opc) 
             {
                 case 1:
-                    Combat startCombat = new Combat();
+                    EnemySpawner startCombat = new EnemySpawner();
                     inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
                     CombatMenu();
                     break;
@@ -93,13 +94,7 @@ namespace RPG
                     break;
                 case 2:
                     //Abre el inventario de pociones y puedes seleccionar una para consumir
-                    Console.WriteLine("Inventario");
-                    for (int i = 0; i < playerInventory.Consumables.Count(); i++) 
-                    {
-                        Console.WriteLine($"{i + 1}. {playerInventory.Consumables[i]} Cantidad: {playerInventory.PlayerInventory[playerInventory.Consumables[i]]}");
-                    }
-                    int potion = CheckValidOption(1,2);
-
+                    CombatInventory();
                     break;
                 case 3:
                     //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
@@ -121,13 +116,16 @@ namespace RPG
                     CombatMenu();
                     return;
             }
+            if (player1.ActualHealth <= 0) 
+            {
+                DefeatMenu();
+            }
             //Si la lista de enemigos esta vacia terminas el combate
-            if (inCombatEnemies.Count() == 0)
+            else if (inCombatEnemies.Count() == 0)
             {
                 Console.Clear();
                 VictoryMenu();
                 Console.ReadKey();
-                MainMenu();
             }
             else 
             {
@@ -153,6 +151,20 @@ namespace RPG
         private void VictoryMenu() 
         {
             Console.WriteLine("Derrotaste a todos los enemigos!");
+            Console.WriteLine("Presiona cualquier tecla para continuar");
+            Console.ReadKey();
+            player1.ResetStats();
+            MainMenu();
+        }
+        private void DefeatMenu() 
+        {
+            int xpLost = ran.Next(1, 11);
+            player1.Derrota(xpLost);
+            Console.WriteLine("Moriste :)");
+            Console.WriteLine($"Perdiste {xpLost} puntos de experiencia");
+            Console.WriteLine("Presiona cualquier tecla para continuar");
+            Console.ReadKey();
+            MainMenu();
         }
         //Combat system
         public void Fight(int atackingEnemy) 
@@ -167,8 +179,8 @@ namespace RPG
 
             //Selecionas el arma que vas a usar para atacar
             Console.WriteLine("Selecciona el arma que usaras");
-            Console.WriteLine($"1. Espada daño: {player1.Sword.WeaponDamage} Elemento: {elements[player1.Sword.WeaponElement]}");
-            Console.WriteLine($"2. Arco daño: {player1.Bow.WeaponDamage} Elemento: {elements[player1.Bow.WeaponElement]} (Probabilidad de evadir todo el daño)");
+            Console.WriteLine($"1. Espada daño: {player1.Sword.WeaponDamage} + Bonus de daño {player1.DamageModifier} Elemento: {elements[player1.Sword.WeaponElement]}");
+            Console.WriteLine($"2. Arco daño: {player1.Bow.WeaponDamage} + Bonus de daño {player1.DamageModifier} Elemento: {elements[player1.Bow.WeaponElement]} (Probabilidad de evadir todo el daño)");
             int weapon = CheckValidOption(1, 2);
             switch (weapon)
             {
@@ -192,12 +204,18 @@ namespace RPG
                     break;
             }
         }
+        private void AtackEnemy(int enemyToAtack, float damage)
+        {
+            inCombatEnemies[enemyToAtack - 1].RecibirDano(CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor, player1.DamageModifier));
+            CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
+        }
         private void CheckIfAlive(Enemigos enemyToCheck)
         {
             if (enemyToCheck.Health <= 0)
             {
+                player1.AñadirXP(enemyToCheck.XP_drop);
                 int itemQuantity = ran.Next(1, 4);
-                Console.WriteLine($"Acabaste con {enemyToCheck.Nombre} recibes:");
+                Console.WriteLine($"Acabaste con {enemyToCheck.Nombre} recibes {enemyToCheck.XP_drop} puntos de experiencia y:");
                 for (int i = 0; i <= itemQuantity; i++) 
                 {
                     string loot = LootToReceive(enemyToCheck.Rango, enemyToCheck.Elemento);
@@ -209,10 +227,51 @@ namespace RPG
                 inCombatEnemies.Remove(enemyToCheck);
             }
         }
-        private void AtackEnemy(int enemyToAtack, float damage) 
+        private void CombatInventory() 
         {
-            inCombatEnemies[enemyToAtack - 1].RecibirDano(CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor));
-            CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
+            Console.WriteLine("Inventario");
+            for (int i = 0; i < playerInventory.Consumables.Count(); i++)
+            {
+                Console.WriteLine($"{i + 1}. {playerInventory.Consumables[i]} Cantidad: {playerInventory.PlayerInventory[playerInventory.Consumables[i]]}");
+            }
+            Console.WriteLine($"{playerInventory.Consumables.Count() + 1}. Regresar");
+            int potion = CheckValidOption(1, playerInventory.Consumables.Count() + 1);
+            if (potion == playerInventory.Consumables.Count() + 1)
+            {
+                CombatMenu();
+                return;
+            }
+            else if (!ConsumePotion(potion))
+            {
+                Console.WriteLine("No tienes suficientes pociones");
+                CombatInventory();
+            }
+            Console.WriteLine("Presiona cualquier tecla para continuar");
+            Console.ReadKey();
         }
+        private bool ConsumePotion(int potionToConsume) 
+        {
+            if (playerInventory.PlayerInventory[playerInventory.Consumables[potionToConsume - 1]] > 0)
+            {
+                switch (potionToConsume) 
+                {
+                    case 1:
+                        Console.WriteLine("Tu daño aumentó!");
+                        player1.DamageModifier += 2;
+                        break;
+                    case 2:
+                        Console.WriteLine("Curas tus heridas");
+                        player1.ActualHealth += 2;
+                        break;
+                }
+                playerInventory.PlayerInventory[playerInventory.Consumables[potionToConsume - 1]] -= 1;
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+        }
+       
     }
 }

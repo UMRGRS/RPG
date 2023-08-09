@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace RPG
@@ -64,9 +63,9 @@ namespace RPG
             return nomRegresar;
          }
         //Calculadora de daño
-        public float CalculateDamage(float atackerDamage,int atackerElement, int targetElement, float TargetArmor)
+        public float CalculateDamage(float atackerDamage,int atackerElement, int targetElement, float TargetArmor, float damageModifer = 0)
         {  
-            float damage = atackerDamage - TargetArmor;
+            float damage = atackerDamage - TargetArmor + damageModifer;
             if (advantage.ContainsKey(atackerElement) && advantage[atackerElement] == targetElement)
             {
                 damage += 2;

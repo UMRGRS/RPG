@@ -6,7 +6,7 @@ using System.Text;
 namespace RPG
 {
     //Test
-    internal class Combat
+    internal class EnemySpawner
     {
         //Clase para generar numeros aleatorios
         private readonly Random ran = new Random(); 

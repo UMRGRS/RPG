@@ -38,7 +38,7 @@ namespace RPG
 
         //Stats
         private string name;
-        private float damageModifier;
+        private float damageModifier = 0;
         private float actualHealth;
         private int armorElement = 0;
         private int lvl;
@@ -82,10 +82,19 @@ namespace RPG
                 AumentarEstadisticas();
             }
         }
-        public void Derrota()
+        public void Derrota(int xpLost)
         {
-            xP -= 5;
+            xP -= xpLost;
+            if (xP < 0) 
+            {
+                xP = 0;
+            }
+            ResetStats();
+        }
+        public void ResetStats() 
+        {
             actualHealth = Health;
+            damageModifier = 0;
         }
         public override void RecibirDano(float damage)
         {

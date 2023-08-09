@@ -14,6 +14,7 @@ namespace RPG
         private List<string> aquaJams = new List<string>() { "Aqua Jam (Hydro I)", "Anfi Jam (Hydro II)", "Nepht Jam (Hydro III)" };
         private List<string> pyroJams = new List<string>() { "Igna Jam (Pyro I)", "Hesta Jam (Pyro II)", "Hephe Jam (Pyro III)" };
         private List<string> dendroJams = new List<string>() { "Natura Jam (Dendro I)", "Ninphe Jam (Dendro II)", "Demetra Jam (Dendro III)" };
+
         private List<string> consumables = new List<string>() { "Athena Potion (Poción de daño)", "Sephe Potion (Poción de vida)" };
         
         public Dictionary<string, int> PlayerInventory { get => playerInventory; set => playerInventory = value; }
@@ -28,7 +29,7 @@ namespace RPG
         }
         public void AddItems() 
         {
-            playerInventory.Add("Athena Potion (Poción de daño)", 0); //Pocion de daño
+            playerInventory.Add("Athena Potion (Poción de daño)", 2); //Pocion de daño
             playerInventory.Add("Sephe Potion (Poción de vida)", 2); //Pocion de vida
 
             playerInventory.Add("Aqua Jam (Hydro I)", 0); //Agua 1
