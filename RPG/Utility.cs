@@ -65,7 +65,7 @@ namespace RPG
         //Calculadora de daño
         public float CalculateDamage(float atackerDamage,int atackerElement, int targetElement, float TargetArmor, float damageModifer = 0)
         {  
-            float damage = atackerDamage - TargetArmor + damageModifer;
+            float damage = atackerDamage - TargetArmor;
             if (advantage.ContainsKey(atackerElement) && advantage[atackerElement] == targetElement)
             {
                 damage += 2;
@@ -80,9 +80,9 @@ namespace RPG
             }
             if (damage < 0) 
             {
-                return 0;
+                return damageModifer;
             }
-            return damage;
+            return damage + damageModifer;
         }
         //Determinador de botin
         public string LootToReceive(int tierEnemigo, int elemento) 

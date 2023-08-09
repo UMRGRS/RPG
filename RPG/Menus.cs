@@ -57,8 +57,7 @@ namespace RPG
                     InventoryMenu();
                     break;
                 case 3:
-                    Console.Clear();
-                    CraftingMenu();
+                    CraftingAndEnhancingMenu();
                     break;
                 case 4:
                     Console.Clear();
@@ -136,9 +135,26 @@ namespace RPG
         { 
             //Recuperar la informacion de la clase inventario y desplegarla aqui
         }
-        private void CraftingMenu() 
-        { 
+        private void CraftingAndEnhancingMenu() 
+        {
             //Desplegar menu para crear objetos
+            Console.WriteLine("Selecciona una opcion");
+            Console.WriteLine("1. Crear pociones");
+            Console.WriteLine("2. Mejorar equipamiento");
+            Console.WriteLine("3. Regresar");
+            int opc = CheckValidOption(1, 3);
+            switch (opc) 
+            {
+                case 1:
+                    CreatePotions();
+                    break;
+                case 2:
+                    EnhanceEquipment();
+                    break;
+                case 3:
+                    MainMenu();
+                    break;
+            }
         }
         private void EquipmentAndStatsMenu() 
         { 
@@ -166,6 +182,67 @@ namespace RPG
             Console.ReadKey();
             MainMenu();
         }
+        //Menu de creacion de pociones
+        private void CreatePotions() 
+        {
+            Console.Clear();
+            Console.WriteLine("¿Que poción deseas crear?");
+            foreach (Potions potion in playerInventory.Consumables) 
+            {
+                Console.WriteLine($"{playerInventory.Consumables.IndexOf(potion) + 1}. {potion.Name}");
+                Console.WriteLine("Necesitas:");
+                foreach (Components comp in potion.Components) 
+                {
+                    Console.WriteLine($"1 {comp.Component} Tienes: {playerInventory.PlayerInventory[comp.Component]}");
+                }
+                Console.WriteLine(" ");
+            }
+            Console.WriteLine("3. Regresar");
+            int potionToCreate = CheckValidOption(1, 3);
+            if (potionToCreate == 3)
+            {
+                MainMenu();
+                return;
+            }
+            else 
+            {
+                if (CheckMaterials(playerInventory.Consumables[potionToCreate].Components))
+                {
+                    playerInventory.PlayerInventory[playerInventory.Consumables[potionToCreate].Name] += 1;
+                    Console.WriteLine($"Creaste {playerInventory.Consumables[potionToCreate].Name} x 1");
+                    Console.WriteLine("Presiona cualquier tecla para continuar");
+                    Console.ReadKey();
+                    CreatePotions();
+                }
+                else 
+                {
+                    Console.WriteLine("No tienes los materiales para crear esa poción prueba con otra o recolecta mas materiales");
+                    CreatePotions();
+                }
+            }
+        }
+        //Menu de mejora de equipo
+        private void EnhanceEquipment()
+        {
+
+        }
+        //Revisa en tu inventario si tienes lo materiales necesarios para crear un objeto
+        private bool CheckMaterials(List<Components> components) 
+        {
+            foreach (Components comp in components) 
+            {
+                if (playerInventory.PlayerInventory[comp.Component] < comp.Quantity)
+                {
+                    return false;
+                }
+            }
+            foreach (Components comp in components) 
+            {
+                playerInventory.PlayerInventory[comp.Component] -= comp.Quantity;
+            }
+            return true;
+        }
+        
         //Combat system
         public void Fight(int atackingEnemy) 
         {
@@ -186,7 +263,7 @@ namespace RPG
             {
                 case 1:
                     player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.ArmorElement));
-                    AtackEnemy(enemyToAtack, player1.Sword.WeaponDamage);
+                    AtackEnemy(enemyToAtack, player1.Sword.WeaponDamage, player1.Sword.WeaponElement);
                     break;
                 case 2:
                     //Generas un numero aleatorio, si es menor a 4 no recibes daño
@@ -194,19 +271,18 @@ namespace RPG
                     if (damageOrNot < 4)
                     {
                         Console.WriteLine("Esquivaste los ataques enemigos");
-                        AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
                     }
                     else
                     {
                         player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.Armor));
-                        AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage);
                     }
+                    AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage, player1.Bow.WeaponElement);
                     break;
             }
         }
-        private void AtackEnemy(int enemyToAtack, float damage)
+        private void AtackEnemy(int enemyToAtack, float damage, int atackerElement)
         {
-            inCombatEnemies[enemyToAtack - 1].RecibirDano(CalculateDamage(damage, 0, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor, player1.DamageModifier));
+            inCombatEnemies[enemyToAtack - 1].RecibirDano(CalculateDamage(damage, atackerElement, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor, player1.DamageModifier));
             CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
         }
         private void CheckIfAlive(Enemigos enemyToCheck)
@@ -232,7 +308,7 @@ namespace RPG
             Console.WriteLine("Inventario");
             for (int i = 0; i < playerInventory.Consumables.Count(); i++)
             {
-                Console.WriteLine($"{i + 1}. {playerInventory.Consumables[i]} Cantidad: {playerInventory.PlayerInventory[playerInventory.Consumables[i]]}");
+                Console.WriteLine($"{i + 1}. {playerInventory.Consumables[i].Name} Cantidad: {playerInventory.PlayerInventory[playerInventory.Consumables[i].Name]}");
             }
             Console.WriteLine($"{playerInventory.Consumables.Count() + 1}. Regresar");
             int potion = CheckValidOption(1, playerInventory.Consumables.Count() + 1);
@@ -251,7 +327,7 @@ namespace RPG
         }
         private bool ConsumePotion(int potionToConsume) 
         {
-            if (playerInventory.PlayerInventory[playerInventory.Consumables[potionToConsume - 1]] > 0)
+            if (playerInventory.PlayerInventory[playerInventory.Consumables[potionToConsume - 1].Name] > 0)
             {
                 switch (potionToConsume) 
                 {
@@ -264,7 +340,7 @@ namespace RPG
                         player1.ActualHealth += 2;
                         break;
                 }
-                playerInventory.PlayerInventory[playerInventory.Consumables[potionToConsume - 1]] -= 1;
+                playerInventory.PlayerInventory[playerInventory.Consumables[potionToConsume - 1].Name] -= 1;
                 return true;
             }
             else 

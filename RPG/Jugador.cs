@@ -9,9 +9,11 @@ namespace RPG
     {
         private float weaponDamage;
         private int weaponElement = 0;
-
+        private int equipmentTier = 1;
         public float WeaponDamage { get => weaponDamage; set => weaponDamage = value; }
         public int WeaponElement { get => weaponElement; set => weaponElement = value; }
+        public int EquipmentTier { get => equipmentTier; set => equipmentTier = value; }
+
         public Weapon(float weaponDamage) 
         {
             this.weaponDamage = weaponDamage;
@@ -21,9 +23,11 @@ namespace RPG
     {
         private float shieldDefense;
         private int shieldElement = 0;
-
+        private int shieldTier = 1;
         public float ShieldDefense { get => shieldDefense; set => shieldDefense = value; }
         public int ShieldElement { get => shieldElement; set => shieldElement = value; }
+        public int ShieldTier { get => shieldTier; set => shieldTier = value; }
+
         public Shield(float shieldDefense)
         {
             this.shieldDefense = shieldDefense;
@@ -69,7 +73,6 @@ namespace RPG
         public void AumentarEstadisticas()
         {
             Health += 1;
-            BaseDamage += 1;
             Armor += 1;
         }
         public void AñadirXP(int xp)
