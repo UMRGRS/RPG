@@ -141,6 +141,23 @@ namespace RPG
         private void InventoryMenu() 
         { 
             //Recuperar la informacion de la clase inventario y desplegarla aqui
+            Console.WriteLine("INVENTARIO");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Athena Potion (Poción de daño)"] + " Athena Potion (Poción de daño)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Sephe Potion (Poción de vida)"] + " Sephe Potion (Poción de vida)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Aqua Jam (Hydro I)"] + " Aqua Jam (Hydro I)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Anfi Jam (Hydro II)"] + " Anfi Jam (Hydro II)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Nepht Jam (Hydro III)"] + " Nepht Jam (Hydro III)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Igna Jam (Pyro I)"] + " Igna Jam (Pyro I)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Hesta Jam (Pyro II)"] + " Hesta Jam (Pyro II)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Hephe Jam (Pyro III)"] + " Hephe Jam (Pyro III)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Natura Jam (Dendro I)"] + " Natura Jam (Dendro I)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Ninphe Jam (Dendro II)"] + " Ninphe Jam (Dendro II)");
+            Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Demetra Jam (Dendro III)"] + " Demetra Jam (Dendro III)");
+            Console.WriteLine("");
+            Console.WriteLine("Precione la tecla '1' para volver al menu");
+            int opc = CheckValidOption(1, 1);
+            if (opc == 1) MainMenu(); 
+
         }
         private void CraftingAndEnhancingMenu() 
         {
@@ -165,8 +182,19 @@ namespace RPG
             }
         }
         private void EquipmentAndStatsMenu() 
-        { 
+        {
             //Despliega el daño/defensa de el equipo mas su elemento y las stats del jugador
+            Console.WriteLine("Tu vida: "+player1.Health);
+            Console.WriteLine("Tu experiencia: "+player1.XP+"/"+ player1.XP_sig_LV);
+            Console.WriteLine("Tu armadura: " + player1.FullArmor.Defense+" Elemento: "+ elements[player1.FullArmor.Element]);
+            Console.WriteLine("Espada: Daño: " + player1.Sword.WeaponDamage +" Elemento: "+ elements[player1.Sword.WeaponElement]);
+            Console.WriteLine("Arco: Daño: " + player1.Bow.WeaponDamage + " Elemento: " + elements[player1.Bow.WeaponElement]);
+            Console.WriteLine("Escudo: Proteccion: " + player1.Shield.Defense + " Elemento: " + elements[player1.Shield.Element]);
+            Console.WriteLine("");
+            Console.WriteLine("Precione la tecla '1' para volver al menu");
+            int opc = CheckValidOption(1, 1);
+            if (opc == 1) MainMenu();
+
         }
         private void Dungeon()
         { 
