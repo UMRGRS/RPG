@@ -13,6 +13,7 @@ namespace RPG
         //Objects
         private Jugador player1;
         private Inventory playerInventory = new Inventory();
+        private EnemySpawner startCombat = new EnemySpawner();
 
         //Variables
         private List<Enemigos> inCombatEnemies;
@@ -27,7 +28,7 @@ namespace RPG
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(10, 4, 2, 1.5f, 0.5f, 12);
+            player1 = new Jugador(100, 100, 2, 1.5f, 0.5f, 1);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
@@ -53,9 +54,8 @@ namespace RPG
             switch (opc) 
             {
                 case 1:
-                    EnemySpawner startCombat = new EnemySpawner();
                     inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
-                    CombatMenu();
+                    CombatMenu(1);
                     break;
                 case 2:
                     Console.Clear();
@@ -80,9 +80,10 @@ namespace RPG
             }
         }
         //Inicia un combate y muestra las opciones disponibles
-        private void CombatMenu() 
+        private void CombatMenu(int rounds) 
         {
             Console.Clear();
+            Console.WriteLine($"Rondas restantes {rounds}");
             int atackingEnemy = ran.Next(1, inCombatEnemies.Count() + 1);
             Console.WriteLine($"Te encuentras con {inCombatEnemies.Count()} slimes");
             Console.WriteLine($"El enemigo numero {atackingEnemy} ({elements[inCombatEnemies[atackingEnemy - 1].Elemento]}) se prepara para atacar");
@@ -99,7 +100,7 @@ namespace RPG
                     break;
                 case 2:
                     //Abre el inventario de pociones y puedes seleccionar una para consumir
-                    CombatInventory();
+                    CombatInventory(rounds);
                     break;
                 case 3:
                     //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
@@ -119,23 +120,32 @@ namespace RPG
                 default:
                     Console.Clear();
                     Console.WriteLine("Ocurrio un error intenta de nuevo");
-                    CombatMenu();
+                    CombatMenu(rounds);
                     return;
             }
-            if (player1.ActualHealth <= 0) 
+            //Si ya la lista de enemigos esta vacia o la vida del jugador llega a cero terminas el combate
+            if (player1.ActualHealth <= 0)
             {
                 DefeatMenu();
             }
-            //Si la lista de enemigos esta vacia terminas el combate
             else if (inCombatEnemies.Count() == 0)
             {
-                Console.Clear();
-                VictoryMenu();
-                Console.ReadKey();
+                rounds--;
+                if (rounds <= 0)
+                {
+                    Console.Clear();
+                    VictoryMenu();
+                    Console.ReadKey();
+                }
+                else 
+                {
+                    inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
+                    CombatMenu(rounds);
+                }
             }
-            else 
+            else
             {
-                CombatMenu();
+                CombatMenu(rounds);
             }
         }
         private void InventoryMenu() 
@@ -487,7 +497,7 @@ namespace RPG
             }
         }
         //Abre el inventario de pociones en combate
-        private void CombatInventory() 
+        private void CombatInventory(int rounds) 
         {
             Console.WriteLine("Inventario");
             for (int i = 0; i < playerInventory.Consumables.Count(); i++)
@@ -498,13 +508,13 @@ namespace RPG
             int potion = CheckValidOption(1, playerInventory.Consumables.Count() + 1);
             if (potion == playerInventory.Consumables.Count() + 1)
             {
-                CombatMenu();
+                CombatMenu(rounds);
                 return;
             }
             else if (!ConsumePotion(potion))
             {
                 Console.WriteLine("No tienes suficientes pociones");
-                CombatInventory();
+                CombatInventory(rounds);
             }
             Console.WriteLine("Presiona cualquier tecla para continuar");
             Console.ReadKey();
