@@ -569,7 +569,8 @@ namespace RPG
         private void EndGameMenu()
         {
             Console.Clear();
-            Console.WriteLine("Derrotaste al rey slime!");
+            Console.WriteLine("!Felicidades, Derrotaste al rey slime!");
+            Console.WriteLine("Aniqulaste al lider de una especie y a todos los miembros de la misma, lo hiciste increible! :D");
             Console.WriteLine("Presiona cualquier tecla para recibir tu premio!");
             Console.ReadKey();
             Environment.Exit(0);
