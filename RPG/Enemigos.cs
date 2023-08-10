@@ -7,6 +7,9 @@ namespace RPG
 {
     internal class Enemigos:Personaje
     {
+        //Utility
+        private readonly Random ran = new Random();
+
         //Variables
         private string name;
         private int element;
@@ -41,5 +44,10 @@ namespace RPG
         {
             base.RecibirDano(dano);
         }
+        public void ChangeElement()
+        {
+            Elemento = ran.Next(1, 4);
+        }
     }
 }
+

@@ -14,7 +14,7 @@ namespace RPG
         public List<Enemigos> SpawnEnemies(int lvl) 
         {
             //En base al nivel del jugador hacemos aparecer slimes de nivel mas alto o bajo
-            List <Enemigos> activeEnemies;
+            List<Enemigos> activeEnemies;
             if (lvl < 4)
             {
                 activeEnemies = SelectEnemies(1, lvl);
@@ -28,6 +28,12 @@ namespace RPG
                 activeEnemies = SelectEnemies(3, lvl);
             }
             return activeEnemies;
+        }
+        //Spawns one boss enemy 
+        public Enemigos SpawnBoss() 
+        {
+            Enemigos boss = new Enemigos("King slime", 1, 1, 1, 1, 100, 5);
+            return boss;
         }
         private List<Enemigos> SelectEnemies(int enemyLvl, int lvl) 
         {

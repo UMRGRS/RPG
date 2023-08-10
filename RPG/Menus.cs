@@ -28,7 +28,7 @@ namespace RPG
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(100, 100, 2, 1.5f, 0.5f, 1);
+            player1 = new Jugador(1, 100, 2, 1.5f, 0.5f, 1);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
@@ -55,7 +55,7 @@ namespace RPG
             {
                 case 1:
                     inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
-                    CombatMenu(1);
+                    CombatMenu(1, false);
                     break;
                 case 2:
                     Console.Clear();
@@ -80,7 +80,7 @@ namespace RPG
             }
         }
         //Inicia un combate y muestra las opciones disponibles
-        private void CombatMenu(int rounds) 
+        private void CombatMenu(int rounds, bool boss) 
         {
             Console.Clear();
             Console.WriteLine($"Rondas restantes {rounds}");
@@ -100,7 +100,7 @@ namespace RPG
                     break;
                 case 2:
                     //Abre el inventario de pociones y puedes seleccionar una para consumir
-                    CombatInventory(rounds);
+                    CombatInventory(rounds, boss);
                     break;
                 case 3:
                     //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
@@ -120,13 +120,19 @@ namespace RPG
                 default:
                     Console.Clear();
                     Console.WriteLine("Ocurrio un error intenta de nuevo");
-                    CombatMenu(rounds);
+                    CombatMenu(rounds, boss);
                     return;
             }
             //Si ya la lista de enemigos esta vacia o la vida del jugador llega a cero terminas el combate
             if (player1.ActualHealth <= 0)
             {
                 DefeatMenu();
+            } 
+            else if (inCombatEnemies.Count() == 0 && boss && rounds == 2) 
+            {
+                rounds--;
+                inCombatEnemies.Add(startCombat.SpawnBoss());
+                CombatMenu(rounds, false);
             }
             else if (inCombatEnemies.Count() == 0)
             {
@@ -137,15 +143,15 @@ namespace RPG
                     VictoryMenu();
                     Console.ReadKey();
                 }
-                else 
+                else
                 {
                     inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
-                    CombatMenu(rounds);
+                    CombatMenu(rounds, boss);
                 }
             }
             else
             {
-                CombatMenu(rounds);
+                CombatMenu(rounds, boss);
             }
         }
         private void InventoryMenu() 
@@ -164,10 +170,9 @@ namespace RPG
             Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Ninphe Jam (Dendro II)"] + " Ninphe Jam (Dendro II)");
             Console.WriteLine("Tiene " + playerInventory.PlayerInventory["Demetra Jam (Dendro III)"] + " Demetra Jam (Dendro III)");
             Console.WriteLine("");
-            Console.WriteLine("Precione la tecla '1' para volver al menu");
+            Console.WriteLine("Presiona la tecla '1' para volver al menu principal");
             int opc = CheckValidOption(1, 1);
             if (opc == 1) MainMenu(); 
-
         }
         private void CraftingAndEnhancingMenu() 
         {
@@ -201,34 +206,26 @@ namespace RPG
             Console.WriteLine("Arco: Daño: " + player1.Bow.WeaponDamage + " Elemento: " + elements[player1.Bow.WeaponElement]);
             Console.WriteLine("Escudo: Proteccion: " + player1.Shield.Defense + " Elemento: " + elements[player1.Shield.Element]);
             Console.WriteLine("");
-            Console.WriteLine("Precione la tecla '1' para volver al menu");
+            Console.WriteLine("Presiona la tecla '1' para volver al menu principal");
             int opc = CheckValidOption(1, 1);
             if (opc == 1) MainMenu();
-
         }
         private void Dungeon()
-        { 
-            //Inicia la mazmorra
-        }
-        private void VictoryMenu() 
         {
-            Console.Clear();
-            Console.WriteLine("Derrotaste a todos los enemigos!");
-            Console.WriteLine("Presiona cualquier tecla para continuar");
-            Console.ReadKey();
-            player1.ResetStats();
-            MainMenu();
-        }
-        private void DefeatMenu() 
-        {
-            Console.Clear();
-            int xpLost = ran.Next(1, 11);
-            player1.Derrota(xpLost);
-            Console.WriteLine("Moriste :)");
-            Console.WriteLine($"Perdiste {xpLost} puntos de experiencia");
-            Console.WriteLine("Presiona cualquier tecla para continuar");
-            Console.ReadKey();
-            MainMenu();
+            Console.WriteLine("Te enfrentaras a multiples rondas de poderoso enemigos ¿estas seguro de continuar?");
+            Console.WriteLine("1. Continuar");
+            Console.WriteLine("2. Regresar");
+            int opc = CheckValidOption(1, 2);
+            switch (opc) 
+            {
+                case 1:
+                    inCombatEnemies = startCombat.SpawnEnemies(player1.LVL);
+                    CombatMenu(3, true);
+                    break;
+                case 2:
+                    MainMenu();
+                    break;
+            }
         }
         //Menu de creacion de pociones
         private void CreatePotions() 
@@ -479,13 +476,13 @@ namespace RPG
         //Revsita si un enemigo sigue vivo, sino entrega todas las recompensas
         private void CheckIfAlive(Enemigos enemyToCheck)
         {
-            if (enemyToCheck.Health <= 0)
+            if (enemyToCheck.Health <= 0 && enemyToCheck.Rango != 5)
             {
                 Console.WriteLine(" ");
                 player1.AñadirXP(enemyToCheck.XP_drop);
                 int itemQuantity = ran.Next(1, 4);
                 Console.WriteLine($"Acabaste con {enemyToCheck.Nombre} recibes {enemyToCheck.XP_drop} puntos de experiencia y:");
-                for (int i = 0; i <= itemQuantity; i++) 
+                for (int i = 0; i <= itemQuantity; i++)
                 {
                     string loot = LootToReceive(enemyToCheck.Rango, enemyToCheck.Elemento);
                     playerInventory.PlayerInventory[loot] += 1;
@@ -495,9 +492,14 @@ namespace RPG
                 Console.ReadKey();
                 inCombatEnemies.Remove(enemyToCheck);
             }
+            else if (enemyToCheck.Health <= 0 && enemyToCheck.Rango == 5)  
+            {
+                inCombatEnemies.Remove(enemyToCheck);
+                EndGameMenu();
+            }
         }
         //Abre el inventario de pociones en combate
-        private void CombatInventory(int rounds) 
+        private void CombatInventory(int rounds, bool boss) 
         {
             Console.WriteLine("Inventario");
             for (int i = 0; i < playerInventory.Consumables.Count(); i++)
@@ -508,13 +510,13 @@ namespace RPG
             int potion = CheckValidOption(1, playerInventory.Consumables.Count() + 1);
             if (potion == playerInventory.Consumables.Count() + 1)
             {
-                CombatMenu(rounds);
+                CombatMenu(rounds, boss);
                 return;
             }
             else if (!ConsumePotion(potion))
             {
                 Console.WriteLine("No tienes suficientes pociones");
-                CombatInventory(rounds);
+                CombatInventory(rounds, boss);
             }
             Console.WriteLine("Presiona cualquier tecla para continuar");
             Console.ReadKey();
@@ -542,6 +544,34 @@ namespace RPG
             {
                 return false;
             }
+        }
+        private void VictoryMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Derrotaste a todos los enemigos!");
+            Console.WriteLine("Presiona cualquier tecla para continuar");
+            Console.ReadKey();
+            player1.ResetStats();
+            MainMenu();
+        }
+        private void DefeatMenu()
+        {
+            Console.Clear();
+            int xpLost = ran.Next(1, 11);
+            player1.Derrota(xpLost);
+            Console.WriteLine("Moriste :)");
+            Console.WriteLine($"Perdiste {xpLost} puntos de experiencia");
+            Console.WriteLine("Presiona cualquier tecla para continuar");
+            Console.ReadKey();
+            MainMenu();
+        }
+        private void EndGameMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Derrotaste al rey slime!");
+            Console.WriteLine("Presiona cualquier tecla para recibir tu premio!");
+            Console.ReadKey();
+            Environment.Exit(0);
         }
     }
 }
