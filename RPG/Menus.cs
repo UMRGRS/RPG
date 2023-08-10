@@ -375,7 +375,7 @@ namespace RPG
                 Console.WriteLine($"Creaste {upgrade.Name}");
                 Console.WriteLine($"Daño/defensa + {upgrade.StatQuantity} Elemento: {elements[upgrade.Element]}");
 
-                if (weaponToUpgrade != null)
+                if (weaponToUpgrade.WeaponDamage != 0)
                 {
                     weaponToUpgrade.AddStats(upgrade.StatQuantity, upgrade.Element, upgrade.Tier);
                 }
