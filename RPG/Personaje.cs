@@ -10,7 +10,7 @@ namespace RPG
         public float Health { get => health; set => health = value; }
         public float BaseDamage { get => baseDamage; set => baseDamage = value; }
         public float Armor { get => armor; set => armor = value; }
-        public Personaje(float health, float armor, [Optional] float baseDamage)
+        public Personaje(float health, [Optional] float armor, [Optional] float baseDamage)
         {
             this.health = health;
             this.baseDamage = baseDamage;

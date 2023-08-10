@@ -66,19 +66,38 @@ namespace RPG
         private List<Potions> consumables = new List<Potions>();
 
         //Upgrades
-        private List<Upgrades> swordUpgrades = new List<Upgrades>();
-        private List<Upgrades> bowUpgrades = new List<Upgrades>();
-        private List<Upgrades> armorUpgrades = new List<Upgrades>();
-        private List<Upgrades> shieldUpgrades = new List<Upgrades>();
+        private List<Upgrades> hydroSwordUpgrades = new List<Upgrades>();
+        private List<Upgrades> pyroSwordUpgrades = new List<Upgrades>();
+        private List<Upgrades> dendroSwordUpgrades = new List<Upgrades>();
+
+        private List<Upgrades> hydroBowUpgrades = new List<Upgrades>();
+        private List<Upgrades> pyroBowUpgrades = new List<Upgrades>();
+        private List<Upgrades> dendroBowUpgrades = new List<Upgrades>();
+
+        private List<Upgrades> hydroArmorUpgrades = new List<Upgrades>();
+        private List<Upgrades> pyroArmorUpgrades = new List<Upgrades>();
+        private List<Upgrades> dendroArmorUpgrades = new List<Upgrades>();
+
+        private List<Upgrades> hydroShieldUpgrades = new List<Upgrades>();
+        private List<Upgrades> pyroShieldUpgrades = new List<Upgrades>();
+        private List<Upgrades> dendroShieldUpgrades = new List<Upgrades>();
         public Dictionary<string, int> PlayerInventory { get => playerInventory; set => playerInventory = value; }
         public List<string> AquaJams { get => aquaJams; set => aquaJams = value; }
         public List<string> PyroJams { get => pyroJams; set => pyroJams = value; }
         public List<string> DendroJams { get => dendroJams; set => dendroJams = value; }
-        public List<Upgrades> SwordUpgrades { get => swordUpgrades; set => swordUpgrades = value; }
-        public List<Upgrades> BowUpgrades { get => bowUpgrades; set => bowUpgrades = value; }
-        public List<Upgrades> ArmorUpgrades { get => armorUpgrades; set => armorUpgrades = value; }
-        public List<Upgrades> ShieldUpgrades { get => shieldUpgrades; set => shieldUpgrades = value; }
         public List<Potions> Consumables { get => consumables; set => consumables = value; }
+        public List<Upgrades> HydroSwordUpgrades { get => hydroSwordUpgrades; set => hydroSwordUpgrades = value; }
+        public List<Upgrades> PyroSwordUpgrades { get => pyroSwordUpgrades; set => pyroSwordUpgrades = value; }
+        public List<Upgrades> DendroSwordUpgrades { get => dendroSwordUpgrades; set => dendroSwordUpgrades = value; }
+        public List<Upgrades> HydroBowUpgrades { get => hydroBowUpgrades; set => hydroBowUpgrades = value; }
+        public List<Upgrades> PyroBowUpgrades { get => pyroBowUpgrades; set => pyroBowUpgrades = value; }
+        public List<Upgrades> DendroBowUpgrades { get => dendroBowUpgrades; set => dendroBowUpgrades = value; }
+        public List<Upgrades> HydroArmorUpgrades { get => hydroArmorUpgrades; set => hydroArmorUpgrades = value; }
+        public List<Upgrades> PyroArmorUpgrades { get => pyroArmorUpgrades; set => pyroArmorUpgrades = value; }
+        public List<Upgrades> DendroArmorUpgrades { get => dendroArmorUpgrades; set => dendroArmorUpgrades = value; }
+        public List<Upgrades> HydroShieldUpgrades { get => hydroShieldUpgrades; set => hydroShieldUpgrades = value; }
+        public List<Upgrades> PyroShieldUpgrades { get => pyroShieldUpgrades; set => pyroShieldUpgrades = value; }
+        public List<Upgrades> DendroShieldUpgrades { get => dendroShieldUpgrades; set => dendroShieldUpgrades = value; }
 
         public Inventory() 
         {
@@ -91,77 +110,77 @@ namespace RPG
             playerInventory.Add("Athena Potion (Poción de daño)", 2); //Pocion de daño
             playerInventory.Add("Sephe Potion (Poción de vida)", 2); //Pocion de vida
 
-            playerInventory.Add("Aqua Jam (Hydro I)", 2); //Agua 1
-            playerInventory.Add("Anfi Jam (Hydro II)", 0); //2
-            playerInventory.Add("Nepht Jam (Hydro III)", 0); //3
+            playerInventory.Add("Aqua Jam (Hydro I)", 5); //Agua 1
+            playerInventory.Add("Anfi Jam (Hydro II)", 5); //2
+            playerInventory.Add("Nepht Jam (Hydro III)", 5); //3
 
-            playerInventory.Add("Igna Jam (Pyro I)", 2); //Fuego 1
-            playerInventory.Add("Hesta Jam (Pyro II)", 0); //2
-            playerInventory.Add("Hephe Jam (Pyro III)", 0); //3
+            playerInventory.Add("Igna Jam (Pyro I)", 5); //Fuego 1
+            playerInventory.Add("Hesta Jam (Pyro II)", 5); //2
+            playerInventory.Add("Hephe Jam (Pyro III)", 5); //3
 
-            playerInventory.Add("Natura Jam (Dendro I)", 2); //Naturaleza 1
-            playerInventory.Add("Ninphe Jam (Dendro II)", 0); //2
-            playerInventory.Add("Demetra Jam (Dendro III)", 0); //3
+            playerInventory.Add("Natura Jam (Dendro I)", 5); //Naturaleza 1
+            playerInventory.Add("Ninphe Jam (Dendro II)", 5); //2
+            playerInventory.Add("Demetra Jam (Dendro III)", 5); //3
             
         }
         private void CreatePotions() 
         {
-             consumables.Add(new Potions("Athena Potion (Poción de daño)", new List<Components> { new Components("Aqua Jam (Hydro I)", 1), new Components("Igna Jam (Pyro I)", 1) }));
+            consumables.Add(new Potions("Athena Potion (Poción de daño)", new List<Components> { new Components("Aqua Jam (Hydro I)", 1), new Components("Igna Jam (Pyro I)", 1) }));
             consumables.Add(new Potions("Sephe Potion (Poción de vida)", new List<Components> { new Components("Aqua Jam (Hydro I)", 1), new Components("Natura Jam (Dendro I)", 1) }));
         }
         private void CreateUpgrades() 
         {
             //Sword
-            swordUpgrades.Add(new Upgrades("Espada hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
-            swordUpgrades.Add(new Upgrades("Espada pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
-            swordUpgrades.Add(new Upgrades("Espada dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            hydroSwordUpgrades.Add(new Upgrades("Espada hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
+            hydroSwordUpgrades.Add(new Upgrades("Espada hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
+            hydroSwordUpgrades.Add(new Upgrades("Espada hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
 
-            swordUpgrades.Add(new Upgrades("Espada hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
-            swordUpgrades.Add(new Upgrades("Espada pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
-            swordUpgrades.Add(new Upgrades("Espada dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            pyroSwordUpgrades.Add(new Upgrades("Espada pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
+            pyroSwordUpgrades.Add(new Upgrades("Espada pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
+            pyroSwordUpgrades.Add(new Upgrades("Espada pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
 
-            swordUpgrades.Add(new Upgrades("Espada hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
-            swordUpgrades.Add(new Upgrades("Espada pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
-            swordUpgrades.Add(new Upgrades("Espada dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
+            dendroSwordUpgrades.Add(new Upgrades("Espada dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            dendroSwordUpgrades.Add(new Upgrades("Espada dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            dendroSwordUpgrades.Add(new Upgrades("Espada dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
 
             //Bow
-            bowUpgrades.Add(new Upgrades("Arco hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
-            bowUpgrades.Add(new Upgrades("Arco pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
-            bowUpgrades.Add(new Upgrades("Arco dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            hydroBowUpgrades.Add(new Upgrades("Arco hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
+            hydroBowUpgrades.Add(new Upgrades("Arco hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
+            hydroBowUpgrades.Add(new Upgrades("Arco hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
 
-            bowUpgrades.Add(new Upgrades("Arco hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
-            bowUpgrades.Add(new Upgrades("Arco pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
-            bowUpgrades.Add(new Upgrades("Arco dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            pyroBowUpgrades.Add(new Upgrades("Arco pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
+            pyroBowUpgrades.Add(new Upgrades("Arco pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
+            pyroBowUpgrades.Add(new Upgrades("Arco pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
 
-            bowUpgrades.Add(new Upgrades("Arco hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
-            bowUpgrades.Add(new Upgrades("Arco pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
-            bowUpgrades.Add(new Upgrades("Arco dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
+            dendroBowUpgrades.Add(new Upgrades("Arco dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            dendroBowUpgrades.Add(new Upgrades("Arco dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            dendroBowUpgrades.Add(new Upgrades("Arco dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
 
             //Armor
-            armorUpgrades.Add(new Upgrades("Armadura hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
-            armorUpgrades.Add(new Upgrades("Armadura pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
-            armorUpgrades.Add(new Upgrades("Armadura dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            hydroArmorUpgrades.Add(new Upgrades("Armadura hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
+            hydroArmorUpgrades.Add(new Upgrades("Armadura hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
+            hydroArmorUpgrades.Add(new Upgrades("Armadura hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
 
-            armorUpgrades.Add(new Upgrades("Armadura hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
-            armorUpgrades.Add(new Upgrades("Armadura pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
-            armorUpgrades.Add(new Upgrades("Armadura dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            pyroArmorUpgrades.Add(new Upgrades("Armadura pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
+            pyroArmorUpgrades.Add(new Upgrades("Armadura pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
+            pyroArmorUpgrades.Add(new Upgrades("Armadura pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
 
-            armorUpgrades.Add(new Upgrades("Armadura hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
-            armorUpgrades.Add(new Upgrades("Armadura pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
-            armorUpgrades.Add(new Upgrades("Armadura dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
+            dendroArmorUpgrades.Add(new Upgrades("Armadura dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            dendroArmorUpgrades.Add(new Upgrades("Armadura dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            dendroArmorUpgrades.Add(new Upgrades("Armadura dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
 
             //Shield
-            shieldUpgrades.Add(new Upgrades("Escudo hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
-            shieldUpgrades.Add(new Upgrades("Escudo pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
-            shieldUpgrades.Add(new Upgrades("Escudo dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            hydroShieldUpgrades.Add(new Upgrades("Escudo hydro I", new List<Components> { new Components("Aqua Jam (Hydro I)", 5) }, 5, 1, 2));
+            hydroShieldUpgrades.Add(new Upgrades("Escudo hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
+            hydroShieldUpgrades.Add(new Upgrades("Escudo hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
 
-            shieldUpgrades.Add(new Upgrades("Escudo hydro II", new List<Components> { new Components("Anfi Jam (Hydro II)", 5) }, 5, 1, 3));
-            shieldUpgrades.Add(new Upgrades("Escudo pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
-            shieldUpgrades.Add(new Upgrades("Escudo dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            pyroShieldUpgrades.Add(new Upgrades("Escudo pyro I", new List<Components> { new Components("Igna Jam (Pyro I)", 5) }, 5, 2, 2));
+            pyroShieldUpgrades.Add(new Upgrades("Escudo pyro II", new List<Components> { new Components("Hesta Jam (Pyro II)", 5) }, 5, 2, 3));
+            pyroShieldUpgrades.Add(new Upgrades("Escudo pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
 
-            shieldUpgrades.Add(new Upgrades("Escudo hydro III", new List<Components> { new Components("Nepht Jam (Hydro III)", 5) }, 5, 1, 4));
-            shieldUpgrades.Add(new Upgrades("Escudo pyro III", new List<Components> { new Components("Hephe Jam (Pyro III)", 5) }, 5, 2, 4));
-            shieldUpgrades.Add(new Upgrades("Escudo dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
+            dendroShieldUpgrades.Add(new Upgrades("Escudo dendro I", new List<Components> { new Components("Natura Jam (Dendro I)", 5) }, 5, 3, 2));
+            dendroShieldUpgrades.Add(new Upgrades("Escudo dendro II", new List<Components> { new Components("Ninphe Jam (Dendro II)", 5) }, 5, 3, 3));
+            dendroShieldUpgrades.Add(new Upgrades("Escudo dendro III", new List<Components> { new Components("Demetra Jam (Dendro III)", 5) }, 5, 3, 4));
         }
     }
 }

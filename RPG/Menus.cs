@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Linq;
 
 namespace RPG
 {
-    //Está clase son solo menus, cada uno de ellos se comunica con todas las demas clases para ejecutar las funciones necesarias
     internal class Menus:Utility
     {
         //Utility
@@ -16,8 +16,13 @@ namespace RPG
 
         //Variables
         private List<Enemigos> inCombatEnemies;
-        private readonly Dictionary<int, string> elements = new Dictionary<int, string>() { { 0, "Sin elemento" }, { 1, "Hydro" }, { 2, "Pyro" }, { 3, "Dendro" } };
         
+        //Elements
+        private readonly Dictionary<int, string> elements = new Dictionary<int, string>() { { 0, "Sin elemento" }, { 1, "Hydro" }, { 2, "Pyro" }, { 3, "Dendro" } };
+
+        /// <summary>
+        /// Menus
+        /// </summary>
         //Call this method to start the game :b
         public void StartGame() 
         {
@@ -74,6 +79,7 @@ namespace RPG
                     break;
             }
         }
+        //Inicia un combate y muestra las opciones disponibles
         private void CombatMenu() 
         {
             Console.Clear();
@@ -97,7 +103,7 @@ namespace RPG
                     break;
                 case 3:
                     //Activar el metodo calcular daño solo para el jugador usando la defensa de su escudo
-                    float damage = CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.MyShield.ShieldElement, player1.MyShield.ShieldDefense);
+                    float damage = CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.Shield.Element, player1.Shield.Defense);
                     player1.RecibirDano(damage);
                     Console.WriteLine($"Te proteges con tu escudo recibes {damage} puntos de daño");
                     Console.WriteLine("Presiona cualquier tecla para continuar");
@@ -191,11 +197,7 @@ namespace RPG
             {
                 Console.WriteLine($"{playerInventory.Consumables.IndexOf(potion) + 1}. {potion.Name}");
                 Console.WriteLine("Necesitas:");
-                foreach (Components comp in potion.Components) 
-                {
-                    Console.WriteLine($"1 {comp.Component} Tienes: {playerInventory.PlayerInventory[comp.Component]}");
-                }
-                Console.WriteLine(" ");
+                ShowComponents(potion.Components);
             }
             Console.WriteLine("3. Regresar");
             int potionToCreate = CheckValidOption(1, 3);
@@ -206,10 +208,10 @@ namespace RPG
             }
             else 
             {
-                if (CheckMaterials(playerInventory.Consumables[potionToCreate].Components))
+                if (CheckMaterials(playerInventory.Consumables[potionToCreate - 1].Components))
                 {
-                    playerInventory.PlayerInventory[playerInventory.Consumables[potionToCreate].Name] += 1;
-                    Console.WriteLine($"Creaste {playerInventory.Consumables[potionToCreate].Name} x 1");
+                    playerInventory.PlayerInventory[playerInventory.Consumables[potionToCreate - 1].Name] += 1;
+                    Console.WriteLine($"Creaste {playerInventory.Consumables[potionToCreate - 1].Name} x 1");
                     Console.WriteLine("Presiona cualquier tecla para continuar");
                     Console.ReadKey();
                     CreatePotions();
@@ -217,6 +219,8 @@ namespace RPG
                 else 
                 {
                     Console.WriteLine("No tienes los materiales para crear esa poción prueba con otra o recolecta mas materiales");
+                    Console.WriteLine("Presiona cualquier tecla para continuar");
+                    Console.ReadKey();
                     CreatePotions();
                 }
             }
@@ -224,7 +228,143 @@ namespace RPG
         //Menu de mejora de equipo
         private void EnhanceEquipment()
         {
+            Console.WriteLine("Selecciona el equipo que quieres mejorar");
+            Console.WriteLine("1. Espada");
+            Console.WriteLine("2. Arco");
+            Console.WriteLine("3. Armadura");
+            Console.WriteLine("4. Escudo");
+            Console.WriteLine("5. Regresar");
+            int opc = CheckValidOption(1, 5);
+            switch (opc) 
+            {
+                case 1:
+                    ShowUpgrades(playerInventory.HydroSwordUpgrades, playerInventory.PyroSwordUpgrades, playerInventory.DendroSwordUpgrades, player1.Sword.Tier, player1.Sword.WeaponElement, player1.Sword);
+                    break;
+                case 2:
+                    ShowUpgrades(playerInventory.HydroBowUpgrades, playerInventory.PyroBowUpgrades, playerInventory.DendroBowUpgrades, player1.Bow.Tier, player1.Bow.WeaponElement, player1.Bow);
+                    break;
+                case 3:
+                    ShowUpgrades(playerInventory.HydroArmorUpgrades, playerInventory.PyroArmorUpgrades, playerInventory.DendroArmorUpgrades, player1.FullArmor.Tier, player1.FullArmor.Element, new Weapon(0),player1.FullArmor);
+                    break;
+                case 4:
+                    ShowUpgrades(playerInventory.HydroShieldUpgrades, playerInventory.PyroShieldUpgrades, playerInventory.DendroShieldUpgrades, player1.Shield.Tier, player1.Shield.Element, new Weapon(0), player1.Shield);
+                    break;
+                case 5:
+                    CraftingAndEnhancingMenu();
+                    return;
+            }
+        }
+        /// <summary>
+        /// Crafting system methods
+        /// </summary>
+        //Shows the upgrades depending on the element of the equipment
+        private void ShowUpgrades(List<Upgrades> hydroUpgrades, List<Upgrades> pyroUpgrades, List<Upgrades> dendroUpgrades, int tier, int element, [Optional] Weapon weaponToUpgrade, [Optional] DefensiveItem defensiveItemToUpgrade) 
+        {
+            int upgradeSelected;
+            if (weaponToUpgrade!= null && weaponToUpgrade.Tier == 4 || defensiveItemToUpgrade != null && defensiveItemToUpgrade.Tier == 4) 
+            {
+                Console.WriteLine("Ya tienes todas las mejoras");
+                Console.WriteLine("Presiona cualquier tecla para continuar");
+                Console.ReadKey();
+                Console.Clear();
+                EnhanceEquipment();
+                return;
+            }
+            Console.WriteLine("Mejoras disponibles");
+            if (element == 0)
+            {
+                Console.WriteLine($"1. {hydroUpgrades[tier - 1].Name} Necesitas:");
+                ShowComponents(hydroUpgrades[tier - 1].Components);
+                Console.WriteLine($"2. {pyroUpgrades[tier - 1].Name} Necesitas:");
+                ShowComponents(pyroUpgrades[tier - 1].Components);
+                Console.WriteLine($"3. {dendroUpgrades[tier - 1].Name} Necesitas:");
+                ShowComponents(dendroUpgrades[tier - 1].Components);
+                Console.WriteLine("4. Regresar");
+                upgradeSelected = CheckValidOption(1, 4);
+                if (upgradeSelected == 4)
+                {
+                    EnhanceEquipment();
+                    return;
+                }
+                switch (upgradeSelected)
+                {
+                    case 1:
+                        UpgradeStats(hydroUpgrades[tier - 1], weaponToUpgrade, defensiveItemToUpgrade);
+                        break;
+                    case 2:
+                        UpgradeStats(pyroUpgrades[tier - 1], weaponToUpgrade, defensiveItemToUpgrade);
+                        break;
+                    case 3:
+                        UpgradeStats(dendroUpgrades[tier - 1], weaponToUpgrade, defensiveItemToUpgrade);
+                        break;
+                }
+                EnhanceEquipment();
+                return;
+            }
+            Upgrades upgradeToMake = null;
+            switch (element)
+            {
+                case 1:
+                    Console.WriteLine($"1. {hydroUpgrades[tier - 1].Name} Necesitas:");
+                    upgradeToMake = hydroUpgrades[tier - 1];
+                    ShowComponents(hydroUpgrades[tier - 1].Components);
+                    break;
+                case 2:
+                    Console.WriteLine($"1. {pyroUpgrades[tier - 1].Name} Necesitas:");
+                    upgradeToMake = pyroUpgrades[tier - 1];
+                    ShowComponents(pyroUpgrades[tier - 1].Components);
+                    break;
+                case 3:
+                    Console.WriteLine($"1. {dendroUpgrades[tier - 1].Name} Necesitas:");
+                    upgradeToMake = dendroUpgrades[tier - 1];
+                    ShowComponents(dendroUpgrades[tier - 1].Components);
+                    break;
+            }
+            Console.WriteLine("2. Regresar");
+            upgradeSelected = CheckValidOption(1, 2);
+            if (upgradeSelected == 2)
+            {
+                EnhanceEquipment();
+                return;
+            }
+            else 
+            {
+                UpgradeStats(upgradeToMake, weaponToUpgrade, defensiveItemToUpgrade);
+                EnhanceEquipment();
+            }
+        }
+        private void UpgradeStats(Upgrades upgrade, Weapon weaponToUpgrade, DefensiveItem defensiveItemToUpgrade)
+        {
+            if (CheckMaterials(upgrade.Components))
+            {
+                Console.WriteLine($"Creaste {upgrade.Name}");
+                Console.WriteLine($"Daño/defensa + {upgrade.StatQuantity} Elemento: {elements[upgrade.Element]}");
 
+                if (weaponToUpgrade != null)
+                {
+                    weaponToUpgrade.AddStats(upgrade.StatQuantity, upgrade.Element, upgrade.Tier);
+                }
+                else 
+                {
+                    defensiveItemToUpgrade.AddStats(upgrade.StatQuantity, upgrade.Element, upgrade.Tier);
+                }
+                Console.WriteLine("Presiona cualquier tecla para continuar");
+                Console.ReadKey();
+                Console.Clear();
+            }
+            else
+            {
+                Console.WriteLine("No tienes los materiales para mejorar prueba con otra mejora o recolecta mas materiales");
+                Console.WriteLine("Presiona cualquier tecla para continuar");
+                Console.ReadKey();
+                Console.Clear();
+            }
+        }
+        //Muestra todos los componentes necesarios para crear un objeto
+        private void ShowComponents(List<Components> components) 
+        { 
+            components.ForEach(delegate (Components comp) { Console.WriteLine($"{comp.Component} x {comp.Quantity} Tienes: {playerInventory.PlayerInventory[comp.Component]}"); });
+            Console.WriteLine(" ");
         }
         //Revisa en tu inventario si tienes lo materiales necesarios para crear un objeto
         private bool CheckMaterials(List<Components> components) 
@@ -242,8 +382,9 @@ namespace RPG
             }
             return true;
         }
-        
-        //Combat system
+        /// <summary>
+        /// Combat system methods
+        /// </summary>
         public void Fight(int atackingEnemy) 
         {
             //Desplegar una lista con los enemigos en el campo y dejar al jugador seleccionar a cual atacar
@@ -262,7 +403,7 @@ namespace RPG
             switch (weapon)
             {
                 case 1:
-                    player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.ArmorElement));
+                    player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.FullArmor.Element, player1.FullArmor.Defense));
                     AtackEnemy(enemyToAtack, player1.Sword.WeaponDamage, player1.Sword.WeaponElement);
                     break;
                 case 2:
@@ -274,17 +415,19 @@ namespace RPG
                     }
                     else
                     {
-                        player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.ArmorElement, player1.Armor));
+                        player1.RecibirDano(CalculateDamage(inCombatEnemies[atackingEnemy - 1].BaseDamage, inCombatEnemies[atackingEnemy - 1].Elemento, player1.FullArmor.Element, player1.FullArmor.Defense));
                     }
                     AtackEnemy(enemyToAtack, player1.Bow.WeaponDamage, player1.Bow.WeaponElement);
                     break;
             }
         }
+        //Ataca a un enemigo y revisa si permanece vivo
         private void AtackEnemy(int enemyToAtack, float damage, int atackerElement)
         {
             inCombatEnemies[enemyToAtack - 1].RecibirDano(CalculateDamage(damage, atackerElement, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor, player1.DamageModifier));
             CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
         }
+        //Revsita si un enemigo sigue vivo, sino entrega todas las recompensas
         private void CheckIfAlive(Enemigos enemyToCheck)
         {
             if (enemyToCheck.Health <= 0)
@@ -303,6 +446,7 @@ namespace RPG
                 inCombatEnemies.Remove(enemyToCheck);
             }
         }
+        //Abre el inventario de pociones en combate
         private void CombatInventory() 
         {
             Console.WriteLine("Inventario");
@@ -325,6 +469,7 @@ namespace RPG
             Console.WriteLine("Presiona cualquier tecla para continuar");
             Console.ReadKey();
         }
+        //Consume una pocion y ativa sus efectos
         private bool ConsumePotion(int potionToConsume) 
         {
             if (playerInventory.PlayerInventory[playerInventory.Consumables[potionToConsume - 1].Name] > 0)
@@ -348,6 +493,5 @@ namespace RPG
                 return false;
             }
         }
-       
     }
 }

@@ -9,28 +9,40 @@ namespace RPG
     {
         private float weaponDamage;
         private int weaponElement = 0;
-        private int equipmentTier = 1;
+        private int tier = 1;
         public float WeaponDamage { get => weaponDamage; set => weaponDamage = value; }
         public int WeaponElement { get => weaponElement; set => weaponElement = value; }
-        public int EquipmentTier { get => equipmentTier; set => equipmentTier = value; }
+        public int Tier { get => tier; set => tier = value; }
 
         public Weapon(float weaponDamage) 
         {
             this.weaponDamage = weaponDamage;
         }
-    }
-    public class Shield 
-    {
-        private float shieldDefense;
-        private int shieldElement = 0;
-        private int shieldTier = 1;
-        public float ShieldDefense { get => shieldDefense; set => shieldDefense = value; }
-        public int ShieldElement { get => shieldElement; set => shieldElement = value; }
-        public int ShieldTier { get => shieldTier; set => shieldTier = value; }
-
-        public Shield(float shieldDefense)
+        public void AddStats(float weaponDamage, int element, int tier) 
         {
-            this.shieldDefense = shieldDefense;
+            this.weaponDamage += weaponDamage;
+            weaponElement = element;
+            this.tier = tier;
+        }
+    }
+    public class DefensiveItem
+    {
+        private float defense;
+        private int element = 0;
+        private int tier = 1;
+        public float Defense { get => defense; set => defense = value; }
+        public int Element { get => element; set => element = value; }
+        public int Tier { get => tier; set => tier = value; }
+
+        public DefensiveItem(float defense)
+        {
+            this.defense = defense;
+        }
+        public void AddStats(float defense, int element,int tier)
+        {
+            this.defense += defense;
+            this.element = element;
+            this.tier = tier;
         }
     }
     internal class Jugador : Personaje
@@ -38,13 +50,13 @@ namespace RPG
         //Equipment
         private Weapon sword;
         private Weapon bow;
-        private Shield myShield;
+        private DefensiveItem shield;
+        private DefensiveItem fullArmor;
 
         //Stats
         private string name;
         private float damageModifier = 0;
         private float actualHealth;
-        private int armorElement = 0;
         private int lvl;
         
         //Experience
@@ -56,19 +68,20 @@ namespace RPG
         public int XP { get => xP; set => xP = value; }
         public int XP_sig_LV { get => xP_sig_LV; set => xP_sig_LV = value; }
         public float ActualHealth { get => actualHealth; set => actualHealth = value; }
-        public int ArmorElement { get => armorElement; set => armorElement = value; }
         public float DamageModifier { get => damageModifier; set => damageModifier = value; }
         public Weapon Sword { get => sword; set => sword = value; }
         public Weapon Bow { get => bow; set => bow = value; }
-        public Shield MyShield { get => myShield; set => myShield = value; }
+        public DefensiveItem Shield { get => shield; set => shield = value; }
+        public DefensiveItem FullArmor { get => fullArmor; set => fullArmor = value; }
 
-        public Jugador(float health, float swordDamage, float bowDamage, float shieldDefense, float armorDefense, int lvl):base (health, armorDefense)
+        public Jugador(float health, float swordDamage, float bowDamage, float shieldDefense, float armorDefense, int lvl):base (health)
         {
             this.lvl = lvl;
             actualHealth = health;
             sword = new Weapon(swordDamage);
             bow = new Weapon(bowDamage);
-            myShield = new Shield(shieldDefense);
+            Shield = new DefensiveItem(shieldDefense);
+            fullArmor = new DefensiveItem(armorDefense);
         }
         public void AumentarEstadisticas()
         {
