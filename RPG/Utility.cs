@@ -6,9 +6,13 @@ namespace RPG
 {
     internal class Utility
     {
+        //Utility
         private readonly Random ran = new Random();
+        
+        //Objects
         private readonly Inventory inventory = new Inventory();
         
+        //Variables
         private readonly List<string> aquaNames = new List<string> {"Sere", "Tito", "Nide" };
         private readonly List<string> ignaNames = new List<string> {"Fefe", "Sasa", "Dracus" };
         private readonly List<string> naturaNames = new List<string> {"Nomi", "Goby", "Drida" };

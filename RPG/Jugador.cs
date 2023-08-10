@@ -86,7 +86,6 @@ namespace RPG
         public void AumentarEstadisticas()
         {
             Health += 1;
-            Armor += 1;
         }
         public void AñadirXP(int xp)
         {
