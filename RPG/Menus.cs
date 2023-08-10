@@ -27,7 +27,7 @@ namespace RPG
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(10, 4, 2, 1.5f, 0.5f, 12);
+            player1 = new Jugador(1000, 4, 2, 1.5f, 0.5f, 12);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
@@ -113,6 +113,7 @@ namespace RPG
                     //Mejorar si hay tiempo a un sistema de probabilidad de escape
                     Console.Clear();
                     Console.WriteLine("Escapaste con exito");
+                    Console.WriteLine(" ");
                     MainMenu();
                     return;
                 default:
@@ -144,6 +145,7 @@ namespace RPG
         private void CraftingAndEnhancingMenu() 
         {
             //Desplegar menu para crear objetos
+            Console.Clear();
             Console.WriteLine("Selecciona una opcion");
             Console.WriteLine("1. Crear pociones");
             Console.WriteLine("2. Mejorar equipamiento");
@@ -172,6 +174,7 @@ namespace RPG
         }
         private void VictoryMenu() 
         {
+            Console.Clear();
             Console.WriteLine("Derrotaste a todos los enemigos!");
             Console.WriteLine("Presiona cualquier tecla para continuar");
             Console.ReadKey();
@@ -180,6 +183,7 @@ namespace RPG
         }
         private void DefeatMenu() 
         {
+            Console.Clear();
             int xpLost = ran.Next(1, 11);
             player1.Derrota(xpLost);
             Console.WriteLine("Moriste :)");
@@ -228,6 +232,7 @@ namespace RPG
         //Menu de mejora de equipo
         private void EnhanceEquipment()
         {
+            Console.Clear();
             Console.WriteLine("Selecciona el equipo que quieres mejorar");
             Console.WriteLine("1. Espada");
             Console.WriteLine("2. Arco");
@@ -260,6 +265,7 @@ namespace RPG
         //Shows the upgrades depending on the element of the equipment
         private void ShowUpgrades(List<Upgrades> hydroUpgrades, List<Upgrades> pyroUpgrades, List<Upgrades> dendroUpgrades, int tier, int element, [Optional] Weapon weaponToUpgrade, [Optional] DefensiveItem defensiveItemToUpgrade) 
         {
+            Console.Clear();
             int upgradeSelected;
             if (weaponToUpgrade!= null && weaponToUpgrade.Tier == 4 || defensiveItemToUpgrade != null && defensiveItemToUpgrade.Tier == 4) 
             {
@@ -335,6 +341,7 @@ namespace RPG
         }
         private void UpgradeStats(Upgrades upgrade, Weapon weaponToUpgrade, DefensiveItem defensiveItemToUpgrade)
         {
+            Console.Clear();
             if (CheckMaterials(upgrade.Components))
             {
                 Console.WriteLine($"Creaste {upgrade.Name}");
@@ -388,6 +395,7 @@ namespace RPG
         public void Fight(int atackingEnemy) 
         {
             //Desplegar una lista con los enemigos en el campo y dejar al jugador seleccionar a cual atacar
+            Console.WriteLine(" ");
             Console.WriteLine("Selecciona a quien atacar");
             for (int i = 0; i < inCombatEnemies.Count(); i++)
             {
@@ -396,6 +404,7 @@ namespace RPG
             int enemyToAtack = CheckValidOption(1, inCombatEnemies.Count());
 
             //Selecionas el arma que vas a usar para atacar
+            Console.WriteLine(" ");
             Console.WriteLine("Selecciona el arma que usaras");
             Console.WriteLine($"1. Espada daño: {player1.Sword.WeaponDamage} + Bonus de daño {player1.DamageModifier} Elemento: {elements[player1.Sword.WeaponElement]}");
             Console.WriteLine($"2. Arco daño: {player1.Bow.WeaponDamage} + Bonus de daño {player1.DamageModifier} Elemento: {elements[player1.Bow.WeaponElement]} (Probabilidad de evadir todo el daño)");
@@ -411,6 +420,7 @@ namespace RPG
                     int damageOrNot = ran.Next(1, 11);
                     if (damageOrNot < 4)
                     {
+                        Console.WriteLine(" ");
                         Console.WriteLine("Esquivaste los ataques enemigos");
                     }
                     else
@@ -424,7 +434,8 @@ namespace RPG
         //Ataca a un enemigo y revisa si permanece vivo
         private void AtackEnemy(int enemyToAtack, float damage, int atackerElement)
         {
-            inCombatEnemies[enemyToAtack - 1].RecibirDano(CalculateDamage(damage, atackerElement, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor, player1.DamageModifier));
+            float damageDealt = CalculateDamage(damage, atackerElement, inCombatEnemies[enemyToAtack - 1].Elemento, inCombatEnemies[enemyToAtack - 1].Armor, player1.DamageModifier);
+            inCombatEnemies[enemyToAtack - 1].RecibirDano(damageDealt);
             CheckIfAlive(inCombatEnemies[enemyToAtack - 1]);
         }
         //Revsita si un enemigo sigue vivo, sino entrega todas las recompensas
@@ -432,6 +443,7 @@ namespace RPG
         {
             if (enemyToCheck.Health <= 0)
             {
+                Console.WriteLine(" ");
                 player1.AñadirXP(enemyToCheck.XP_drop);
                 int itemQuantity = ran.Next(1, 4);
                 Console.WriteLine($"Acabaste con {enemyToCheck.Nombre} recibes {enemyToCheck.XP_drop} puntos de experiencia y:");
