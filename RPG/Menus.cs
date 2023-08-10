@@ -27,7 +27,7 @@ namespace RPG
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(1000, 4, 2, 1.5f, 0.5f, 12);
+            player1 = new Jugador(10, 4, 2, 1.5f, 0.5f, 12);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
