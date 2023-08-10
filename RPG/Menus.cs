@@ -28,7 +28,8 @@ namespace RPG
         public void StartGame() 
         {
             int opc = 2;
-            player1 = new Jugador(1, 100, 2, 1.5f, 0.5f, 1);
+            //Player with overpower stats to make tests
+            player1 = new Jugador(100, 100, 100, 5f, 5f, 12);
             while (opc == 2) 
             {
                 Console.WriteLine("Introduce el nombre de tu personaje");
