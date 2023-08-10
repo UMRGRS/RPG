@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace RPG
 {
@@ -15,7 +13,6 @@ namespace RPG
 
         public List<Enemigos> SpawnEnemies(int lvl) 
         {
-            
             //En base al nivel del jugador hacemos aparecer slimes de nivel mas alto o bajo
             List <Enemigos> activeEnemies;
             if (lvl < 4)
