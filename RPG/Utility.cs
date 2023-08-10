@@ -38,7 +38,7 @@ namespace RPG
             if(opt < firstOption || opt > lastOption) 
             {
                 Console.WriteLine("Opcion invalida, seleciona otra");
-                CheckValidOption(firstOption, lastOption);
+                return CheckValidOption(firstOption, lastOption);
             }
             return opt;
         }
